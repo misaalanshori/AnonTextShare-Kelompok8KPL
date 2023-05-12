@@ -9,6 +9,9 @@ namespace AnonTextShareStorage
 { 
     public class SimpleDB : DatabaseConnection
     {
+        // Random
+        private static Random rnd = new();
+
         // Document Storage
         private Dictionary<string, string> docPass = new();
         private Dictionary<string, string> docTitle = new();
@@ -37,6 +40,12 @@ namespace AnonTextShareStorage
             }
 
             return Sb.ToString();
+        }
+
+        // Random ID generator
+        private static string generateRandomID()
+        {
+            return rnd.Next(1, 2147483647).ToString();
         }
 
         // Document Methods
