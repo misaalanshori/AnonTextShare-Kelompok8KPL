@@ -22,7 +22,7 @@
         public abstract bool CheckCollection(string id); // return true jika koleksi ditemukan
         public abstract bool CheckCollection(string id, string pass); // return true jika koleksi ditemukan dan pass benar
         public abstract string GetCollectionTitle(string id);
-        public abstract List<String> GetCollectionContents(string id); // return list string id dokumen
+        public abstract List<string> GetCollectionContents(string id); // return list string id dokumen
         public abstract bool UpdateCollectionTitle(string id, string title, string pass); // return true jika judul berhasil di ubah
         public abstract bool AddCollectionDocument(string id, string documentId, string pass); // return true jika id dokumen berhasil ditambahkan
         public abstract bool RemoveCollectionDocument(string id, string documentId, string pass); // return true jika id dokumen berhasil dihapus

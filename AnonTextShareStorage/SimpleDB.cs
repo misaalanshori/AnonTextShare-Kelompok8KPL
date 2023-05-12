@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Reflection.Metadata;
 
 namespace AnonTextShareStorage
 { 
@@ -113,57 +114,91 @@ namespace AnonTextShareStorage
         // Collection methods
         public override string CreateCollection(string title, List<string> contents)
         {
-            throw new NotImplementedException();
+            string newID = generateRandomID();
+            colPass.Add(newID, "");
+            colTitle.Add(newID, new string(title));
+            colContent.Add(newID, new List<string>(contents));
+            colViews.Add(newID, 0);
+            return newID;
         } // return string id collection, password isi null
 
         public override string CreateCollection(string title, List<string> contents, string pass)
         {
-            throw new NotImplementedException();
+            string newID = generateRandomID();
+            colPass.Add(newID, SHA256Hash(pass));
+            colTitle.Add(newID, new string(title));
+            colContent.Add(newID, new List<string>(contents));
+            colViews.Add(newID, 0);
+            return newID;
         } // return string id collection, simpan password di hash
 
         public override bool CheckCollection(string id)
         {
-            throw new NotImplementedException();
+            return colPass.ContainsKey(id);
         } // return true jika koleksi ditemukan
 
         public override bool CheckCollection(string id, string pass)
         {
-            throw new NotImplementedException();
+            return colPass.ContainsKey(id) && colPass[id].Equals(SHA256Hash(pass));
         } // return true jika koleksi ditemukan dan pass benar
 
         public override string GetCollectionTitle(string id)
         {
-            throw new NotImplementedException();
+            return new string(colTitle[id]);
         }
 
-        public override List<String> GetCollectionContents(string id)
+        public override List<string> GetCollectionContents(string id)
         {
-            throw new NotImplementedException();
+            colViews[id]++;
+            return new List<string>(colContent[id]);
         } // return list string id dokumen
 
         public override bool UpdateCollectionTitle(string id, string title, string pass)
         {
-            throw new NotImplementedException();
+            if (CheckCollection(id, pass))
+            {
+                colTitle[id] = new string(title);
+                return true;
+            }
+            return false;
         } // return true jika judul berhasil di ubah
 
         public override bool AddCollectionDocument(string id, string documentId, string pass)
         {
-            throw new NotImplementedException();
+            if (CheckCollection(id, pass))
+            {
+                colContent[id].Add(documentId);
+                return true;
+            }
+            return false;
         } // return true jika id dokumen berhasil ditambahkan
 
         public override bool RemoveCollectionDocument(string id, string documentId, string pass)
         {
-            throw new NotImplementedException();
+            if (CheckCollection(id, pass))
+            {
+                colContent[id].Remove(documentId);
+                return true;
+            }
+            return false;
         } // return true jika id dokumen berhasil dihapus
 
         public override bool DeleteCollection(string id, string pass)
         {
-            throw new NotImplementedException();
+            if (CheckCollection(id, pass))
+            {
+                colPass.Remove(id);
+                colTitle.Remove(id);
+                colContent.Remove(id);
+                colViews.Remove(id);
+                return true;
+            }
+            return false;
         } // return true jika koleksi berhasil di hapus
 
         public override int GetCollectionViews(string id)
         {
-            throw new NotImplementedException();
+            return colViews[id];
         } // Collection Views di increment setiap GetCollectionContents dipanggil
     }
 }
