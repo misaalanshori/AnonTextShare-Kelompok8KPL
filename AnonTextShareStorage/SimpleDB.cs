@@ -64,7 +64,8 @@ namespace AnonTextShareStorage
         public override string CreateDocument(string title, string text, string pass)
         {
             string key = generateRandomID();
-            docPass.Add(key, pass);
+            string passkey = SHA256Hash(pass);
+            docPass.Add(key, passkey);
             docTitle.Add(key, title);
             docContent.Add(key, text);
             docViews.Add(key, 0);
@@ -74,20 +75,12 @@ namespace AnonTextShareStorage
 
         public override bool CheckDocument(string id)
         {
-            if (docTitle.ContainsKey(id))
-            {
-                return true;
-            }
-            return false;
+            return docTitle.ContainsKey(id);
         } // return true jika dokumen ditemukan
 
         public override bool CheckDocument(string id, string pass)
         {
-            if(docPass.TryGetValue(id,out string value)&& value == pass)
-            {
-                return true;
-            }
-            return false;
+            return docPass.ContainsKey(id) && docPass.ContainsValue(SHA256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
         public override string GetDocumentTitle(string id)
@@ -97,6 +90,7 @@ namespace AnonTextShareStorage
 
         public override string GetDocumentText(string id)
         {
+            docViews[id]++;
             return docContent[id];
         }
 
