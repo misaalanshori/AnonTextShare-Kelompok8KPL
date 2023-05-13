@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
+using static System.Net.Mime.MediaTypeNames;
+
 
 namespace AnonTextShareStorage
 { 
@@ -52,62 +54,100 @@ namespace AnonTextShareStorage
         // Document Methods
         public override string CreateDocument(string title, string text)
         {
-            throw new NotImplementedException();
+            string key = generateRandomID();
+            docPass.Add(key, null);
+            docTitle.Add(key, title);
+            docContent.Add(key, text);
+            docViews.Add(key, 0);
+            docComments.Add(key, new List<string>());
+            return key;
         } // return string id document, password isi null
 
         public override string CreateDocument(string title, string text, string pass)
         {
-            throw new NotImplementedException();
+            string key = generateRandomID();
+            string passkey = SHA256Hash(pass);
+            docPass.Add(key, passkey);
+            docTitle.Add(key, title);
+            docContent.Add(key, text);
+            docViews.Add(key, 0);
+            docComments.Add(key, new List<string>());
+            return key;
         } // return string id document, simpan password di hash
 
         public override bool CheckDocument(string id)
         {
-            throw new NotImplementedException();
+            return docTitle.ContainsKey(id);
         } // return true jika dokumen ditemukan
 
         public override bool CheckDocument(string id, string pass)
         {
-            throw new NotImplementedException();
+            return docPass.ContainsKey(id) && docPass.ContainsValue(SHA256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
         public override string GetDocumentTitle(string id)
         {
-            throw new NotImplementedException();
+            return docTitle[id];
         }
 
         public override string GetDocumentText(string id)
         {
-            throw new NotImplementedException();
+            docViews[id]++;
+            return docContent[id];
         }
 
         public override bool UpdateDocumentTitle(string id, string pass, string title)
         {
-            throw new NotImplementedException();
+            if (CheckDocument(id, pass))
+            {
+                docTitle[id] = title;
+                return true;
+            }
+            return false;
         } // return true jika title dokumen berhasil di update (dokumen ada dan pass benar)
 
         public override bool UpdateDocumentText(string id, string pass, string contents)
         {
-            throw new NotImplementedException();
+            if (CheckDocument(id, pass))
+            {
+                docContent[id] = contents;
+                return true;
+            }
+            return false;
         } // return true jika teks dokumen berhasil di update (dokumen ada dan pass benar)
 
         public override bool DeleteDocument(string id, string pass)
         {
-            throw new NotImplementedException();
+            if (CheckDocument(id, pass))
+            {
+                docPass.Remove(id);
+                docTitle.Remove(id);
+                docContent.Remove(id);
+                docViews.Remove(id);
+                docComments.Remove(id);
+                return true;
+            }
+            return false;
         } // return true jika dokumen berhasil dihapus (dokumen ada dan pass benar)
 
         public override int GetDocumentViews(string id)
         {
-            throw new NotImplementedException();
+            return docViews[id];
         } // Document Views di increment setiap GetDocumentText dipanggil
 
         public override bool AddDocumentComment(string id, string text)
         {
-            throw new NotImplementedException();
+            if (CheckDocument(id))
+            {
+                docComments[id].Add(text);
+                return true;
+            }
+            return false;
         }
 
         public override List<string> GetDocumentComments(string id)
         {
-            throw new NotImplementedException();
+            return docComments[id];
         }
 
 
