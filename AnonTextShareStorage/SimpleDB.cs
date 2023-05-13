@@ -82,7 +82,7 @@ namespace AnonTextShareStorage
 
         public override bool CheckDocument(string id, string pass)
         {
-            return docPass.ContainsKey(id) && docPass.ContainsValue(SHA256Hash(pass));
+            return docPass.ContainsKey(id) && docPass[id].Equals(SHA256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
         public override string GetDocumentTitle(string id)
