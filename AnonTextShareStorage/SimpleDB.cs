@@ -55,13 +55,13 @@ namespace AnonTextShareStorage
         public override string CreateDocument(string title, string text)
         {
             string key = generateRandomID();
-            docPass.Add(key, null);
+            docPass.Add(key, "");
             docTitle.Add(key, title);
             docContent.Add(key, text);
             docViews.Add(key, 0);
             docComments.Add(key, new List<string>());
             return key;
-        } // return string id document, password isi null
+        } // return string id document, password isi empty stringg
 
         public override string CreateDocument(string title, string text, string pass)
         {
@@ -160,7 +160,7 @@ namespace AnonTextShareStorage
             colContent.Add(newID, new List<string>(contents));
             colViews.Add(newID, 0);
             return newID;
-        } // return string id collection, password isi null
+        } // return string id collection, password isi empty string
 
         public override string CreateCollection(string title, List<string> contents, string pass)
         {
