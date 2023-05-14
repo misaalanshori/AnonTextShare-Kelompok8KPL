@@ -42,7 +42,7 @@ namespace AnonTextShareAPI
             {
                 WriteIndented = true
             };
-            string jsonText = JsonSerializer.Serialize<RuntimeConfig>(config, options);
+            string jsonText = JsonSerializer.Serialize(config, options);
             File.WriteAllText(txt, jsonText);
         }
     }
