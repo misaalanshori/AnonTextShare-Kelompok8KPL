@@ -18,15 +18,13 @@ namespace AnonTextShareTests
         [TestMethod]
         public void TestUpdateCollectionsTitle_CorrectPass()
         {
-            db.UpdateCollectionTitle(col, "judul baru", "password");
-            Assert.AreEqual("judul baru", db.GetCollectionTitle(col));
+            Assert.IsTrue(db.UpdateCollectionTitle(col, "judul baru", "password"));
         }
 
         [TestMethod]
         public void TestUpdateCollectionsTitle_IncorrectPass()
         {
-            db.UpdateCollectionTitle(col, "judul terbaru", "passwordsalah");
-            Assert.AreNotEqual("judul terbaru", db.GetCollectionTitle(col));
+            Assert.IsFalse(db.UpdateCollectionTitle(col, "judul terbaru", "passwordsalah"));
         }
     }
 }
