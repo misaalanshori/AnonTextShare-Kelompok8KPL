@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Text.Encodings;
+using Newtonsoft.Json;
+
 namespace AnonTextAppConsoleUI
 {
 	public static class ClientAPI
@@ -12,22 +17,6 @@ namespace AnonTextAppConsoleUI
 			if (response.IsSuccessStatusCode)
 			{
 				TextDocument doc = await response.Content.ReadAsAsync<TextDocument>();
-				//Console.WriteLine($"Title: {doc.title}");
-				//Console.WriteLine($"Views: {doc.views}");
-				//Console.WriteLine("Content:");
-				//Console.WriteLine(doc.contents);
-				//Console.WriteLine("Comments:");
-				//if(doc.comments.Count != 0 && doc.comments != null)
-				//{
-				//	for(int i = 0; i < doc.comments.Count; i++)
-				//	{
-				//		Console.WriteLine($"{i + 1}: {doc.comments[i]}");
-				//	}
-				//}
-				//else
-				//{
-				//	Console.WriteLine("No Comment Yet");
-				//}
 				return doc;
 			}
 			return null;
@@ -62,13 +51,27 @@ namespace AnonTextAppConsoleUI
 
 		public static async Task changeTitle(string id, string password, string newTitle)
 		{
-			response = await client.PatchAsync($"http://localhost:5152/api/TextDocument/{id}/title?pass={password}", new StringContent(newTitle));
-			Console.WriteLine("Tile Updated");
-		}
+            var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/title?pass={password}";
+            var requestContent = new StringContent($"\"{newTitle}\"", Encoding.UTF8, "application/json-patch+json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
+            Console.WriteLine("Title Updated");
+        }
 
         public static async Task updateContent(string id, string password, string content)
         {
-            response = await client.PatchAsync($"http://localhost:5152/api/TextDocument/{id}/contents?pass={password}", new StringContent(content));
+            var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/contents?pass={password}";
+            var requestContent = new StringContent($"\"{content}\"", Encoding.UTF8, "application/json-patch+json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
             Console.WriteLine("Contents Updated");
         }
 
@@ -99,28 +102,41 @@ namespace AnonTextAppConsoleUI
 
 		public static async Task<string> createCollection(string title, string password, List<string> contents)
 		{
-			TextCollection newCollection = new TextCollection(title, contents);
 			if (password != null)
 			{
-				response = await client.PostAsJsonAsync($"http://localhost:5152/api/TextCollection?title={title}&pass={password}", newCollection);
+				response = await client.PostAsJsonAsync($"http://localhost:5152/api/TextCollection?title={title}&pass={password}", contents);
 			}
 			else
 			{
-				response = await client.PostAsJsonAsync($"http://localhost:5152/api/TextCollection?title={title}", newCollection);
+				response = await client.PostAsJsonAsync($"http://localhost:5152/api/TextCollection?title={title}", contents);
 			}
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
 		public static async Task changeCollectionsTitle(string id, string password, string newTitle)
 		{
-            response = await client.PatchAsync($"http://localhost:5152/api/TextCollection/{id}/title?pass={password}", new StringContent(newTitle));
-            Console.WriteLine("Tile Updated");
+            var requestUrl = $"http://localhost:5152/api/TextCollection/{id}/title?pass={password}";
+            var requestContent = new StringContent($"\"{newTitle}\"", Encoding.UTF8, "application/json-patch+json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
+            Console.WriteLine("Title Updated");
         }
 
 		public static async Task AddContents(string id, string password, string textID)
 		{
-			response = await client.PatchAsync($"http://localhost:5152/api/TextCollection/{id}/contents?pass={password}", new StringContent(textID));
-			Console.WriteLine("Content Added");
+            var requestUrl = $"http://localhost:5152/api/TextCollection/{id}/contents?pass={password}";
+            var requestContent = new StringContent($"\"{textID}\"", Encoding.UTF8, "application/json-patch+json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
+            Console.WriteLine("Content Added");
         }
 
 		public static async Task deleteContent(string id, string password, string textID)

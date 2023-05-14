@@ -24,6 +24,8 @@ namespace AnonTextAppConsoleUI
             this.title = title;
             this.contents = contents;
         }
+
+        
     }
 }
 
