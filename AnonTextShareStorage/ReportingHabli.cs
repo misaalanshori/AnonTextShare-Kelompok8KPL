@@ -8,7 +8,7 @@ namespace AnonTextShareStorage
 {
     internal class ReportingHabli
     {
-        private enum State
+        public enum State
         {
             Safe,
             Warning,
@@ -17,70 +17,51 @@ namespace AnonTextShareStorage
         }
 
         private State currentState;
+        private int reportCount;
 
-        private const int ReportThreshold1 = 10;
-        private const int ReportThreshold2 = 50;
-        private const int ReportThreshold3 = 100;
 
-        public void ReportDocument(int reportCount)
+        public ReportingHabli()
+        {
+            currentState = State.Safe;
+            reportCount = 0;
+        }
+
+        private void TriggerTransition()
         {
             switch (currentState)
             {
                 case State.Safe:
-                    if (reportCount >= ReportThreshold1 && reportCount < ReportThreshold2)
+                    if (reportCount >= 10)
                     {
                         currentState = State.Warning;
-                        Console.WriteLine("Document is now in warning state.");
-                    }
-                    else if (reportCount >= ReportThreshold2 && reportCount < ReportThreshold3)
-                    {
-                        currentState = State.Dangerous;
-                        Console.WriteLine("Document is now in dangerous state.");
-                    }
-                    else if (reportCount >= ReportThreshold3)
-                    {
-                        currentState = State.Locked;
-                        Console.WriteLine("Document is now locked.");
+                        Console.WriteLine("Document state transitioned to Warning.");
                     }
                     break;
-
                 case State.Warning:
-                    if (reportCount >= ReportThreshold2 && reportCount < ReportThreshold3)
+                    if (reportCount >= 50)
                     {
                         currentState = State.Dangerous;
-                        Console.WriteLine("Document is now in dangerous state.");
-                    }
-                    else if (reportCount >= ReportThreshold3)
-                    {
-                        currentState = State.Locked;
-                        Console.WriteLine("Document is now locked.");
+                        Console.WriteLine("Document state transitioned to Dangerous.");
                     }
                     break;
-
                 case State.Dangerous:
-                    if (reportCount >= ReportThreshold3)
+                    if (reportCount >= 100)
                     {
                         currentState = State.Locked;
-                        Console.WriteLine("Document is now locked.");
+                        Console.WriteLine("Document state transitioned to Locked.");
                     }
                     break;
-
                 case State.Locked:
-                    Console.WriteLine("Document is locked and cannot be reported.");
+                    currentState = State.Safe;
+                    reportCount = 0;
+                    Console.WriteLine("Document state transitioned to Safe.");
                     break;
-
-                default:
-                    throw new Exception("Unknown state.");
             }
         }
 
-        public void UnlockDocument()
+        public State GetCurrentState()
         {
-            if (currentState == State.Locked)
-            {
-                currentState = State.Safe;
-                Console.WriteLine("Document is now unlocked.");
-            }
+            return currentState;
         }
 
     }
