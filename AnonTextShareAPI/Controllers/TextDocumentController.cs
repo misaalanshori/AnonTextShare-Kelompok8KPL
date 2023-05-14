@@ -29,6 +29,13 @@ namespace AnonTextShareAPI.Controllers
             }
         }
 
+        // POST api/<TextDocumentController>/comment
+        [HttpPost("{id}/comment")]
+        public void PostComment(string id, [FromBody] string comment)
+        {
+            Config.db.AddDocumentComment(id, comment);
+        }
+
         // PATCH api/<TextDocumentController>/{id}/title?pass=password
         [HttpPatch("{id}/title")]
         public void PatchTitle(string id, string pass, [FromBody] string value)
