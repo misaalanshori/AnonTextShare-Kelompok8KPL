@@ -85,7 +85,7 @@ namespace AnonTextShareStorage
             }
             catch (ArgumentException e)
             {
-                return CreateDocument(title, text);
+                return CreateDocument(title, text, pass);
             }
 
         } // return string id document, simpan password di hash
@@ -97,18 +97,27 @@ namespace AnonTextShareStorage
 
         public override bool CheckDocument(string id, string pass)
         {
+            Debug.Assert(pass.Length > 4);
             return docPass.ContainsKey(id) && docPass.ContainsValue(SHA256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
-        public override string GetDocumentTitle(string id)
+        public override string? GetDocumentTitle(string id)
         {
-            return docTitle[id];
+            if (CheckDocument(id))
+            {
+                return docTitle[id];
+            }
+            return null;
         }
 
-        public override string GetDocumentText(string id)
+        public override string? GetDocumentText(string id)
         {
-            docViews[id]++;
-            return docContent[id];
+            if (CheckDocument(id))
+            {
+                docViews[id]++;
+                return docContent[id];
+            }
+            return null;
         }
 
         public override bool UpdateDocumentTitle(string id, string pass, string title)
@@ -147,7 +156,11 @@ namespace AnonTextShareStorage
 
         public override int GetDocumentViews(string id)
         {
-            return docViews[id];
+            if (CheckDocument(id))
+            {
+                return docViews[id];
+            }
+            return -1;
         } // Document Views di increment setiap GetDocumentText dipanggil
 
         public override bool AddDocumentComment(string id, string text)
@@ -160,10 +173,13 @@ namespace AnonTextShareStorage
             return false;
         }
 
-        public override List<string> GetDocumentComments(string id)
+        public override List<string>? GetDocumentComments(string id)
         {
-            return docComments[id];
-        }
+            if (CheckDocument(id))
+            {
+                return docComments[id];
+            }
+            return null;        }
 
 
         // Collection methods
