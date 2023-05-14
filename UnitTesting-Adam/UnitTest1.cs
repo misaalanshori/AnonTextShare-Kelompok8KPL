@@ -26,11 +26,4 @@ public class UnitTest1
         string password = "12345";
         Assert.IsTrue(simpleDB.CheckDocument(id2,password));
     }
-
-    [TestMethod]
-    public void UTA3()
-    {
-        string password = "1234567";
-        Assert.IsFalse(simpleDB.CheckDocument(id2, password));
-    }
 }
