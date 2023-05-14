@@ -46,10 +46,10 @@ namespace AnonTextAppConsoleUI
 			}
 		}
 
-		public static async Task createDocument(string title, string content, string password)
+		public static async Task<string> createDocument(string title, string content, string password)
 		{
 			TextDocument newDoc = new TextDocument(title, content);
-			if(password != null)
+			if (password != null)
 			{
 				response = await client.PostAsJsonAsync("http://localhost:5152/api/TextDocument?pass=" + password, newDoc);
 			}
@@ -57,7 +57,7 @@ namespace AnonTextAppConsoleUI
 			{
 				response = await client.PostAsJsonAsync("http://localhost:5152/api/TextDocument", newDoc);
 			}
-			Console.WriteLine($"Your document id is {response.Content.ReadAsStringAsync()}");
+			return response.Content.ReadAsStringAsync().Result;
 		}
 
 		public static async Task changeTitle(string id, string password, string newTitle)
@@ -117,10 +117,16 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Tile Updated");
         }
 
-		public static async Task updateContents(string id, string password, string textID)
+		public static async Task AddContents(string id, string password, string textID)
 		{
 			response = await client.PatchAsync($"http://localhost:5152/api/TextCollection/{id}/contents?pass={password}", new StringContent(textID));
-			Console.WriteLine("Content Updated");
+			Console.WriteLine("Content Added");
+        }
+
+		public static async Task deleteContent(string id, string password, string textID)
+		{
+            response = await client.DeleteAsync($"http://localhost:5152/api/TextCollection/{id}/contents/{textID}?pass={password}");
+            Console.WriteLine("Content Deleted");
         }
     }
 }
