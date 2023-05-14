@@ -1,7 +1,7 @@
 namespace AnonTextShareTests
 {
     [TestClass]
-    public class UnitTest1
+    public class AnonTextShareAPITests
     {
         [TestMethod]
         public void TestMethod1()
