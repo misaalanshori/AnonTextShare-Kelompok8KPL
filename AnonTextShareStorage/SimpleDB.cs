@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,25 +53,41 @@ namespace AnonTextShareStorage
         // Document Methods
         public override string CreateDocument(string title, string text)
         {
-            string key = generateRandomID();
-            docPass.Add(key, null);
-            docTitle.Add(key, title);
-            docContent.Add(key, text);
-            docViews.Add(key, 0);
-            docComments.Add(key, new List<string>());
-            return key;
+            try
+            {
+                string key = generateRandomID();
+                docPass.Add(key, null);
+                docTitle.Add(key, title);
+                docContent.Add(key, text);
+                docViews.Add(key, 0);
+                docComments.Add(key, new List<string>());
+                return key;
+            }
+            catch (ArgumentException e)
+            {
+                return CreateDocument(title, text);
+            }
         } // return string id document, password isi null
 
         public override string CreateDocument(string title, string text, string pass)
         {
-            string key = generateRandomID();
+            Debug.Assert(pass.Length > 4);
             string passkey = SHA256Hash(pass);
-            docPass.Add(key, passkey);
-            docTitle.Add(key, title);
-            docContent.Add(key, text);
-            docViews.Add(key, 0);
-            docComments.Add(key, new List<string>());
-            return key;
+            try
+            {
+                string key = generateRandomID();
+                docPass.Add(key, passkey);
+                docTitle.Add(key, title);
+                docContent.Add(key, text);
+                docViews.Add(key, 0);
+                docComments.Add(key, new List<string>());
+                return key;
+            }
+            catch (ArgumentException e)
+            {
+                return CreateDocument(title, text);
+            }
+
         } // return string id document, simpan password di hash
 
         public override bool CheckDocument(string id)
