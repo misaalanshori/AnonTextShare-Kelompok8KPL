@@ -16,53 +16,46 @@ namespace AnonTextShareStorage
             Locked
         }
 
-        private State currentState;
-        private int reportCount;
-
-
-        public ReportingHabli()
+        public enum Trigger
         {
-            currentState = State.Safe;
-            reportCount = 0;
+            Escalate,
+            Unlock
         }
 
-        private void TriggerTransition()
+        private class Transition
         {
-            switch (currentState)
+            public State PrevState { get; set; }
+            public State NextState { get; set; }
+            public Trigger Trigger { get; set; }
+
+            public Transition(State prevState, State nextState, Trigger trigger)
             {
-                case State.Safe:
-                    if (reportCount >= 10)
-                    {
-                        currentState = State.Warning;
-                        Console.WriteLine("Document state transitioned to Warning.");
-                    }
-                    break;
-                case State.Warning:
-                    if (reportCount >= 50)
-                    {
-                        currentState = State.Dangerous;
-                        Console.WriteLine("Document state transitioned to Dangerous.");
-                    }
-                    break;
-                case State.Dangerous:
-                    if (reportCount >= 100)
-                    {
-                        currentState = State.Locked;
-                        Console.WriteLine("Document state transitioned to Locked.");
-                    }
-                    break;
-                case State.Locked:
-                    currentState = State.Safe;
-                    reportCount = 0;
-                    Console.WriteLine("Document state transitioned to Safe.");
-                    break;
+                PrevState = prevState;
+                NextState = nextState;
+                Trigger = trigger;
             }
         }
 
-        public State GetCurrentState()
+        private Transition[] transitions = new Transition[]
         {
-            return currentState;
+        new Transition(State.Safe, State.Warning, Trigger.Escalate),
+        new Transition(State.Warning, State.Dangerous, Trigger.Escalate),
+        new Transition(State.Dangerous, State.Locked, Trigger.Escalate),
+        new Transition(State.Locked, State.Safe, Trigger.Unlock)
+        };
+
+        public State GetNextState(State prevState, Trigger trigger)
+        {
+            foreach (Transition transition in transitions)
+            {
+                if (transition.PrevState == prevState && transition.Trigger == trigger)
+                {
+                    return transition.NextState;
+                }
+            }
+            return prevState;
         }
+
 
     }
 }
