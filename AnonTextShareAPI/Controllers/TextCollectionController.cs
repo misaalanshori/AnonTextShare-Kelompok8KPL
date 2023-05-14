@@ -18,7 +18,7 @@ namespace AnonTextShareAPI.Controllers
                 return new TextCollection(id);
             } else
             {
-                return NotFound();
+                return NotFound("Collection does not exist");
             }
             
         }
@@ -56,7 +56,7 @@ namespace AnonTextShareAPI.Controllers
         {
             if (!Config.db.CheckCollection(id))
             {
-                return BadRequest("Collection does not exist");
+                return NotFound("Collection does not exist");
             }
 
             if (pass.Length <= 4)
@@ -79,7 +79,7 @@ namespace AnonTextShareAPI.Controllers
         {
             if (!Config.db.CheckCollection(id))
             {
-                return BadRequest("Collection does not exist");
+                return NotFound("Collection does not exist");
             }
 
             if (pass.Length <= 4)
@@ -108,7 +108,7 @@ namespace AnonTextShareAPI.Controllers
         {
             if (!Config.db.CheckCollection(id))
             {
-                return BadRequest("Collection does not exist");
+                return NotFound("Collection does not exist");
             }
 
             if (pass.Length <= 4)
@@ -137,7 +137,7 @@ namespace AnonTextShareAPI.Controllers
         {
             if (!Config.db.CheckCollection(id))
             {
-                return BadRequest("Collection does not exist");
+                return NotFound("Collection does not exist");
             }
 
             if (pass.Length <= 4)

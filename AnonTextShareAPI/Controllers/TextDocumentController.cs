@@ -73,7 +73,7 @@ namespace AnonTextShareAPI.Controllers
                 return Ok();
             } else
             {
-                return BadRequest("Incorrect Password");
+                return Unauthorized("Incorrect Password");
             }
         }
 
@@ -95,7 +95,7 @@ namespace AnonTextShareAPI.Controllers
             }
             else
             {
-                return BadRequest("Incorrect Password");
+                return Unauthorized("Incorrect Password");
             }
         }
 
@@ -117,7 +117,7 @@ namespace AnonTextShareAPI.Controllers
             }
             else
             {
-                return BadRequest("Incorrect Password");
+                return Unauthorized("Incorrect Password");
             }
             
         }
