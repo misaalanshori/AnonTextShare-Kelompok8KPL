@@ -49,6 +49,16 @@ namespace AnonTextAppConsoleUI
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
+		public static async Task createComment(string id, string comment)
+		{
+            var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/comment";
+            var requestContent = new StringContent($"\"{comment}\"", Encoding.UTF8, "application/json");
+
+            response = await client.PostAsync(requestUrl, requestContent);
+            Console.WriteLine(response);
+            Console.WriteLine("Title Updated");
+        }
+
 		public static async Task changeTitle(string id, string password, string newTitle)
 		{
             var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/title?pass={password}";
