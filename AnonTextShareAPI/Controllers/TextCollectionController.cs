@@ -11,51 +11,148 @@ namespace AnonTextShareAPI.Controllers
 
         // GET api/<TextCollectionController>/{id}
         [HttpGet("{id}")]
-        public TextCollection Get(string id)
+        public ActionResult<TextCollection> Get(string id)
         {
-            return new(id);
+            if (Config.db.CheckCollection(id))
+            {
+                return new TextCollection(id);
+            } else
+            {
+                return NotFound("Collection does not exist");
+            }
+            
         }
 
         // POST api/<TextCollectionController>?title=judul&pass=password
         [HttpPost]
-        public string Post(string title, string? pass, [FromBody] List<string> idList)
+        public ActionResult<string> Post(string title, string? pass, [FromBody] List<string> idList)
         {
+            foreach (string id in idList)
+            {
+                if (!Config.db.CheckDocument(id))
+                {
+                    return BadRequest($"Document {id} does not exist");
+                }
+            }
+
             if (pass == null)
             {
                 return Config.db.CreateCollection(title, idList);
             }
             else
             {
+                if (pass.Length <= 4)
+                {
+                    return BadRequest("Password must be at least 5 characters long");
+                }
+
                 return Config.db.CreateCollection(title, idList, pass);
             }
         }
 
         // PATCH api/<TextCollectionController>/{id}/title?pass=password
         [HttpPatch("{id}/title")]
-        public void PatchTitle(string id, string pass, [FromBody] string value)
+        public IActionResult PatchTitle(string id, string pass, [FromBody] string value)
         {
-            Config.db.UpdateCollectionTitle(id, value, pass);
+            if (!Config.db.CheckCollection(id))
+            {
+                return NotFound("Collection does not exist");
+            }
+
+            if (pass.Length <= 4)
+            {
+                return BadRequest("Password must be at least 5 characters long");
+            }
+
+            if (Config.db.UpdateCollectionTitle(id, value, pass))
+            {
+                return Ok();
+            } else
+            {
+                return Unauthorized("Incorrect Password");
+            }
         }
 
         // PATCH api/<TextCollectionController>/{id}/content?pass=password
         [HttpPatch("{id}/contents")]
-        public void AddContent(string id, string pass, [FromBody] string value)
+        public IActionResult AddContent(string id, string pass, [FromBody] string idDoc)
         {
-            Config.db.AddCollectionDocument(id, value, pass);
+            if (!Config.db.CheckCollection(id))
+            {
+                return NotFound("Collection does not exist");
+            }
+
+            if (pass.Length <= 4)
+            {
+                return BadRequest("Password must be at least 5 characters long");
+            }
+
+            if (!Config.db.CheckDocument(idDoc))
+            {
+                return BadRequest($"Document {idDoc} does not exist");
+            }
+
+            if (Config.db.AddCollectionDocument(id, idDoc, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized("Incorrect Password");
+            }
         }
 
         // PATCH api/<TextCollectionController>/{id}/content/{idDoc}?pass=password
         [HttpDelete("{id}/contents/{idDoc}")]
-        public void RemoveContent(string id, string pass, string idDoc)
+        public IActionResult RemoveContent(string id, string pass, string idDoc)
         {
-            Config.db.RemoveCollectionDocument(id, idDoc, pass);
+            if (!Config.db.CheckCollection(id))
+            {
+                return NotFound("Collection does not exist");
+            }
+
+            if (pass.Length <= 4)
+            {
+                return BadRequest("Password must be at least 5 characters long");
+            }
+
+            if (!Config.db.GetCollectionContents(id).Contains(idDoc))
+            {
+                return BadRequest("Document is not in the collection");
+            }
+
+            if (Config.db.RemoveCollectionDocument(id, idDoc, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized("Incorrect Password");
+            }
         }
 
         // DELETE api/<TextCollectionController>/{id}?pass=password
         [HttpDelete("{id}")]
-        public void Delete(string id, string pass)
+        public IActionResult Delete(string id, string pass)
         {
-            Config.db.DeleteCollection(id, pass);
+            if (!Config.db.CheckCollection(id))
+            {
+                return NotFound("Collection does not exist");
+            }
+
+            if (pass.Length <= 4)
+            {
+                return BadRequest("Password must be at least 5 characters long");
+            }
+
+            if (Config.db.DeleteCollection(id, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized("Incorrect Password");
+            }
         }
     }
 }

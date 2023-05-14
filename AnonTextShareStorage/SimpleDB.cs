@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using static System.Net.Mime.MediaTypeNames;
-
+using System.Diagnostics;
 
 namespace AnonTextShareStorage
 { 
@@ -54,25 +55,42 @@ namespace AnonTextShareStorage
         // Document Methods
         public override string CreateDocument(string title, string text)
         {
-            string key = generateRandomID();
-            docPass.Add(key, "");
-            docTitle.Add(key, title);
-            docContent.Add(key, text);
-            docViews.Add(key, 0);
-            docComments.Add(key, new List<string>());
-            return key;
-        } // return string id document, password isi empty stringg
+            try
+            {
+                string key = generateRandomID();
+                docPass.Add(key, "");
+                docTitle.Add(key, title);
+                docContent.Add(key, text);
+                docViews.Add(key, 0);
+                docComments.Add(key, new List<string>());
+                return key;
+            }
+            catch (ArgumentException e)
+            {
+                return CreateDocument(title, text);
+            }
+        } // return string id document, password isi empty string
+
 
         public override string CreateDocument(string title, string text, string pass)
         {
-            string key = generateRandomID();
+            Debug.Assert(pass.Length > 4);
             string passkey = SHA256Hash(pass);
-            docPass.Add(key, passkey);
-            docTitle.Add(key, title);
-            docContent.Add(key, text);
-            docViews.Add(key, 0);
-            docComments.Add(key, new List<string>());
-            return key;
+            try
+            {
+                string key = generateRandomID();
+                docPass.Add(key, passkey);
+                docTitle.Add(key, title);
+                docContent.Add(key, text);
+                docViews.Add(key, 0);
+                docComments.Add(key, new List<string>());
+                return key;
+            }
+            catch (ArgumentException e)
+            {
+                return CreateDocument(title, text, pass);
+            }
+
         } // return string id document, simpan password di hash
 
         public override bool CheckDocument(string id)
@@ -82,18 +100,27 @@ namespace AnonTextShareStorage
 
         public override bool CheckDocument(string id, string pass)
         {
+            Debug.Assert(pass.Length > 4);
             return docPass.ContainsKey(id) && docPass[id].Equals(SHA256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
-        public override string GetDocumentTitle(string id)
+        public override string? GetDocumentTitle(string id)
         {
-            return docTitle[id];
+            if (CheckDocument(id))
+            {
+                return docTitle[id];
+            }
+            return null;
         }
 
-        public override string GetDocumentText(string id)
+        public override string? GetDocumentText(string id)
         {
-            docViews[id]++;
-            return docContent[id];
+            if (CheckDocument(id))
+            {
+                docViews[id]++;
+                return docContent[id];
+            }
+            return null;
         }
 
         public override bool UpdateDocumentTitle(string id, string pass, string title)
@@ -132,7 +159,11 @@ namespace AnonTextShareStorage
 
         public override int GetDocumentViews(string id)
         {
-            return docViews[id];
+            if (CheckDocument(id))
+            {
+                return docViews[id];
+            }
+            return -1;
         } // Document Views di increment setiap GetDocumentText dipanggil
 
         public override bool AddDocumentComment(string id, string text)
@@ -145,31 +176,49 @@ namespace AnonTextShareStorage
             return false;
         }
 
-        public override List<string> GetDocumentComments(string id)
+        public override List<string>? GetDocumentComments(string id)
         {
-            return docComments[id];
-        }
+            if (CheckDocument(id))
+            {
+                return docComments[id];
+            }
+            return null;        }
 
 
         // Collection methods
         public override string CreateCollection(string title, List<string> contents)
         {
             string newID = generateRandomID();
-            colPass.Add(newID, "");
-            colTitle.Add(newID, new string(title));
-            colContent.Add(newID, new List<string>(contents));
-            colViews.Add(newID, 0);
-            return newID;
+            try
+            {
+                colPass.Add(newID, "");
+                colTitle.Add(newID, new string(title));
+                colContent.Add(newID, new List<string>(contents));
+                colViews.Add(newID, 0);
+                return newID;
+            } catch (ArgumentException e)
+            {
+                return CreateCollection(title, contents);
+            }
+            
         } // return string id collection, password isi empty string
 
         public override string CreateCollection(string title, List<string> contents, string pass)
         {
+            Debug.Assert(pass.Length > 4); // Password harus lebih dari 4 karakter
             string newID = generateRandomID();
-            colPass.Add(newID, SHA256Hash(pass));
-            colTitle.Add(newID, new string(title));
-            colContent.Add(newID, new List<string>(contents));
-            colViews.Add(newID, 0);
-            return newID;
+            try
+            {
+                colPass.Add(newID, SHA256Hash(pass));
+                colTitle.Add(newID, new string(title));
+                colContent.Add(newID, new List<string>(contents));
+                colViews.Add(newID, 0);
+                return newID;
+            } catch (ArgumentException e)
+            {
+                return CreateCollection(title, contents, pass);
+            }
+            
         } // return string id collection, simpan password di hash
 
         public override bool CheckCollection(string id)
@@ -179,18 +228,28 @@ namespace AnonTextShareStorage
 
         public override bool CheckCollection(string id, string pass)
         {
+            Debug.Assert(pass.Length > 4); // Password harus lebih dari 4 karakter
             return colPass.ContainsKey(id) && colPass[id].Equals(SHA256Hash(pass));
         } // return true jika koleksi ditemukan dan pass benar
 
-        public override string GetCollectionTitle(string id)
+        public override string? GetCollectionTitle(string id)
         {
-            return new string(colTitle[id]);
+            if (CheckCollection(id))
+            {
+                return new string(colTitle[id]);
+            }
+            return null;
         }
 
-        public override List<string> GetCollectionContents(string id)
+        public override List<string>? GetCollectionContents(string id)
         {
-            colViews[id]++;
-            return new List<string>(colContent[id]);
+            if (CheckCollection(id))
+            {
+                colViews[id]++;
+                return new List<string>(colContent[id]);
+            }
+            return null;
+            
         } // return list string id dokumen
 
         public override bool UpdateCollectionTitle(string id, string title, string pass)
@@ -238,7 +297,11 @@ namespace AnonTextShareStorage
 
         public override int GetCollectionViews(string id)
         {
-            return colViews[id];
+            if(CheckCollection(id))
+            {
+                return colViews[id];
+            }
+            return -1;
         } // Collection Views di increment setiap GetCollectionContents dipanggil
     }
 }
