@@ -7,14 +7,14 @@
         public abstract string CreateDocument(string title, string text, string pass); // return string id document, simpan password di hash
         public abstract bool CheckDocument(string id); // return true jika dokumen ditemukan
         public abstract bool CheckDocument(string id, string pass); // return true jika dokumen ditemukan dan pass benar
-        public abstract string GetDocumentTitle(string id);
-        public abstract string GetDocumentText(string id);
+        public abstract string? GetDocumentTitle(string id);
+        public abstract string? GetDocumentText(string id);
         public abstract bool UpdateDocumentTitle(string id, string pass, string title); // return true jika title dokumen berhasil di update (dokumen ada dan pass benar)
         public abstract bool UpdateDocumentText(string id, string pass, string contents); // return true jika teks dokumen berhasil di update (dokumen ada dan pass benar)
         public abstract bool DeleteDocument(string id, string pass); // return true jika dokumen berhasil dihapus (dokumen ada dan pass benar)
         public abstract int GetDocumentViews(string id); // Document Views di increment setiap GetDocumentText dipanggil
         public abstract bool AddDocumentComment(string id, string text);
-        public abstract List<string> GetDocumentComments(string id);
+        public abstract List<string>? GetDocumentComments(string id);
 
         // Collection methods
         public abstract string CreateCollection(string title, List<string> contents); // return string id collection, password isi null
