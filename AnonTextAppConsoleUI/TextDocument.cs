@@ -3,11 +3,11 @@ namespace AnonTextAppConsoleUI
 {
 	public class TextDocument
 	{
-        public string? id { get; internal set; }
+        public string? id { get;  set; }
         public string title { get; set; }
         public string contents { get; set; }
-        public List<string>? comments { get; internal set; }
-        public int? views { get; internal set; }
+        public List<string>? comments { get; set; }
+        public int? views { get; set; }
 
         public TextDocument() { }
 

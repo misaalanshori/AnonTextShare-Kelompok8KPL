@@ -51,13 +51,14 @@ namespace AnonTextAppConsoleUI
 
 		public static async Task createComment(string id, string comment)
 		{
-            var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/comment";
-            var requestContent = new StringContent($"\"{comment}\"", Encoding.UTF8, "application/json");
+			var requestUrl = $"http://localhost:5152/api/TextDocument/{id}/comment";
+			var requestContent = new StringContent($"\"{comment}\"", Encoding.UTF8, "application/json");
 
-            response = await client.PostAsync(requestUrl, requestContent);
-            Console.WriteLine(response);
-            Console.WriteLine("Title Updated");
-        }
+			response = await client.PostAsync(requestUrl, requestContent);
+			Console.WriteLine(response);
+			Console.WriteLine("Title Updated");
+			//response = await client.PostAsJsonAsync($"http://localhost:5152/api/TextDocument/{id}/comment", comment);
+		}
 
 		public static async Task changeTitle(string id, string password, string newTitle)
 		{

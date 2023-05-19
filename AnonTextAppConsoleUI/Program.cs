@@ -12,7 +12,7 @@ namespace AnonTextAppConsoleUI
             TextDocument doksli = ClientAPI.getDocument(IdDoksli).Result;
             Console.WriteLine(doksli.title);
             Console.WriteLine(doksli.contents);
-            Console.WriteLine(doksli.comments.Count);
+            //Console.WriteLine(doksli.comments.Count);
             Task task =ClientAPI.changeTitle(IdDoksli,"12345","asu");
             task = ClientAPI.createComment(IdDoksli, "AH");
             doksli = ClientAPI.getDocument(IdDoksli).Result;
