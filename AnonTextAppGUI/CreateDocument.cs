@@ -1,4 +1,5 @@
 ﻿using AnonTextAppConsoleUI;
+using AnonTextShareAPI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,10 +46,15 @@ namespace AnonTextAppGUI
             {
                 button1.BackColor = Color.Green;
 
-                TextDocument document = new TextDocument();
-                // Set title and contents to API
+                // Set title and contents
+                AnonTextShareAPI.TextDocument document = new AnonTextShareAPI.TextDocument();
                 document.title = textBox1.Text;
                 document.contents = richTextBox1.Text;
+
+                // Set document to Client API
+                CreateDocumentController controller = new CreateDocumentController();
+                controller.ClientAPISetter();
+
                 MessageBox.Show("Submited");
                 // Reset String
                 textBox1.Text = string.Empty;
@@ -59,18 +65,23 @@ namespace AnonTextAppGUI
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            // Creating Runtime config for max title and text
+            RuntimeConfig rc = new RuntimeConfig(32, 128);
+
+            // Make a word cap in textBox
             string text = textBox1.Text;
             string[] words = text.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-            if (words.Length > 32)
+            if (words.Length > rc.MaxTitleChars)
             {
                 // Get the first 32 words and join them back into a string
-                string limitedText = string.Join(" ", words.Take(32));
+                string limitedText = string.Join(" ", words.Take(rc.MaxTitleChars));
                 textBox1.Text = limitedText;
 
                 // Set the cursor position at the end of the text box
                 textBox1.SelectionStart = textBox1.Text.Length;
                 textBox1.SelectionLength = 0;
             }
+
             // Changing word counter label
             string text2 = textBox1.Text.Trim();
             int wordCount = 0;
@@ -84,12 +95,16 @@ namespace AnonTextAppGUI
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
+            // Creating Runtime config for max title and text
+            RuntimeConfig rc = new RuntimeConfig(32, 128);
+
+            // Make a word cap in richTextBox
             string text = richTextBox1.Text;
             string[] words = text.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-            if (words.Length > 128)
+            if (words.Length > rc.MaxTextChars)
             {
                 // Get the first 128 words and join them back into a string
-                string limitedText = string.Join(" ", words.Take(128));
+                string limitedText = string.Join(" ", words.Take(rc.MaxTextChars));
                 richTextBox1.Text = limitedText;
 
                 // Set the cursor position at the end of the text box
@@ -112,5 +127,14 @@ namespace AnonTextAppGUI
         {
 
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            textBox2.UseSystemPasswordChar = !checkBox1.Checked;
+        }
+
+        public string title { get { return textBox1.Text; } }
+        public string description { get { return richTextBox1.Text; } }
+        public string password { get { return textBox2.Text; } }
     }
 }
