@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using AnonTextShareStorage;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AnonTextShareAPI.Controllers
@@ -28,16 +28,24 @@ namespace AnonTextShareAPI.Controllers
         [HttpPost]
         public ActionResult<string> Post(string? pass, [FromBody] TextDocument value)
         {
+            if (value.Title.Length > Config.conf.config.MaxTitleChars)
+            {
+                return BadRequest("Title Too Long");
+            }
+            if (value.Contents.Length > Config.conf.config.MaxTextChars)
+            {
+                return BadRequest("Contents Too Long");
+            }
             if (pass == null)
             {
-                return Config.db.CreateDocument(value.title, value.contents);
+                return Config.db.CreateDocument(value.Title, value.Contents, KategoriDokumen.kategoriFromString(value.Kategori));
             } else
             {
                 if (pass.Length <= 4)
                 {
                     return BadRequest("Password must be at least 5 characters long");
                 }
-                return Config.db.CreateDocument(value.title, value.contents, pass);
+                return Config.db.CreateDocument(value.Title, value.Contents, KategoriDokumen.kategoriFromString(value.Kategori), pass);
             }
         }
 
@@ -60,6 +68,10 @@ namespace AnonTextShareAPI.Controllers
         [HttpPatch("{id}/title")]
         public IActionResult PatchTitle(string id, string pass, [FromBody] string value)
         {
+            if (value.Length > Config.conf.config.MaxTitleChars)
+            {
+                return BadRequest("Title Too Long");
+            }
             if (!Config.db.CheckDocument(id))
             {
                 return NotFound("Document does not exist");
@@ -81,6 +93,10 @@ namespace AnonTextShareAPI.Controllers
         [HttpPatch("{id}/contents")]
         public IActionResult PatchContents(string id, string pass, [FromBody] string value)
         {
+            if (value.Length > Config.conf.config.MaxTextChars)
+            {
+                return BadRequest("Contents Too Long");
+            }
             if (!Config.db.CheckDocument(id))
             {
                 return NotFound("Document does not exist");
@@ -90,6 +106,28 @@ namespace AnonTextShareAPI.Controllers
                 return BadRequest("Password must be at least 5 characters long");
             }
             if (Config.db.UpdateDocumentText(id, pass, value))
+            {
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized("Incorrect Password");
+            }
+        }
+
+        // PATCH api/<TextDocumentController>/{id}/contents?pass=password
+        [HttpPatch("{id}/kategori")]
+        public IActionResult PatchKategori(string id, string pass, [FromBody] string value)
+        {
+            if (!Config.db.CheckDocument(id))
+            {
+                return NotFound("Document does not exist");
+            }
+            if (pass.Length <= 4)
+            {
+                return BadRequest("Password must be at least 5 characters long");
+            }
+            if (Config.db.UpdateDocumentCategory(id, KategoriDokumen.kategoriFromString(value), pass))
             {
                 return Ok();
             }

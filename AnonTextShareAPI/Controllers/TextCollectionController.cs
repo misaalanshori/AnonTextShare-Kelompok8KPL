@@ -137,7 +137,7 @@ namespace AnonTextShareAPI.Controllers
         {
             if (Config.db.CheckCollection(id))
             {
-                Config.db.reportDocument(id);
+                Config.db.ReportDocument(id);
                 return Ok();
             }
             else
@@ -146,11 +146,39 @@ namespace AnonTextShareAPI.Controllers
             }
         }
 
-        // POST api/<TextCollectionController>/{id}/report
+        // POST api/<TextCollectionController>/{id}/report/unlock
         [HttpGet("{id}/report/unlock")]
         public ActionResult<TextCollection> PostReportUnlock(string id, [FromBody] string pass)
         {
-            if (Config.db.unlockDocument(id, pass))
+            if (Config.db.UnlockDocument(id, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextCollectionController>/{id}/lock
+        [HttpGet("{id}/lock")]
+        public ActionResult<TextCollection> PostLock(string id, [FromBody] string pass)
+        {
+            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextCollectionController>/{id}/unlock
+        [HttpGet("{id}/unlock")]
+        public ActionResult<TextCollection> PostUnlock(string id, [FromBody] string pass)
+        {
+            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
             {
                 return Ok();
             }
