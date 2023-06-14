@@ -30,13 +30,13 @@
         {
             label1 = new Label();
             panel1 = new Panel();
+            label5 = new Label();
+            label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             textBox1 = new TextBox();
             richTextBox1 = new RichTextBox();
             button1 = new Button();
-            label4 = new Label();
-            label5 = new Label();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -48,6 +48,7 @@
             label1.Size = new Size(117, 19);
             label1.TabIndex = 0;
             label1.Text = "Create Document";
+            label1.Click += label1_Click;
             // 
             // panel1
             // 
@@ -62,11 +63,31 @@
             panel1.Size = new Size(776, 366);
             panel1.TabIndex = 1;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = SystemColors.ControlDarkDark;
+            label5.Location = new Point(727, 86);
+            label5.Name = "label5";
+            label5.Size = new Size(46, 19);
+            label5.TabIndex = 5;
+            label5.Text = "0/128";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = SystemColors.ControlDarkDark;
+            label4.Location = new Point(735, 13);
+            label4.Name = "label4";
+            label4.Size = new Size(38, 19);
+            label4.TabIndex = 4;
+            label4.Text = "0/32";
+            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(6, 64);
+            label3.Location = new Point(6, 75);
             label3.Name = "label3";
             label3.Size = new Size(125, 30);
             label3.TabIndex = 3;
@@ -95,9 +116,9 @@
             // richTextBox1
             // 
             richTextBox1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            richTextBox1.Location = new Point(6, 97);
+            richTextBox1.Location = new Point(6, 110);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(767, 266);
+            richTextBox1.Size = new Size(767, 253);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -111,26 +132,6 @@
             button1.Text = "Publish";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.ForeColor = SystemColors.ControlDarkDark;
-            label4.Location = new Point(748, 13);
-            label4.Name = "label4";
-            label4.Size = new Size(25, 19);
-            label4.TabIndex = 4;
-            label4.Text = "32";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.ForeColor = SystemColors.ControlDarkDark;
-            label5.Location = new Point(740, 75);
-            label5.Name = "label5";
-            label5.Size = new Size(33, 19);
-            label5.TabIndex = 5;
-            label5.Text = "128";
             // 
             // CreateDocument
             // 
