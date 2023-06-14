@@ -39,6 +39,8 @@ namespace AnonTextAppConsoleUI
             {
                 Console.WriteLine(ListSupersemar.contents[i].title);
             }
+
+
         }
     }
 }
