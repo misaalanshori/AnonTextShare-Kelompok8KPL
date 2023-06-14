@@ -4,7 +4,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace AnonTextShareAPI
 {
-    public class KeywordFilter
+    public static class KeywordFilter
     {
         enum BannedKeyword
         {
@@ -14,7 +14,7 @@ namespace AnonTextShareAPI
             Nigga,
             Shit
         }
-        public bool FilterText(string text)
+        public static bool FilterText(string text)
         {
             foreach (string bannedKeyword in Enum.GetNames(typeof(BannedKeyword)))
             {

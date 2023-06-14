@@ -131,6 +131,35 @@ namespace AnonTextShareAPI.Controllers
             }
         }
 
+        // POST api/<TextCollectionController>/{id}/report
+        [HttpGet("{id}/report")]
+        public ActionResult<TextCollection> PostReport(string id)
+        {
+            if (Config.db.CheckCollection(id))
+            {
+                Config.db.reportDocument(id);
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextCollectionController>/{id}/report
+        [HttpGet("{id}/report/unlock")]
+        public ActionResult<TextCollection> PostReportUnlock(string id, [FromBody] string pass)
+        {
+            if (Config.db.unlockDocument(id, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
         // DELETE api/<TextCollectionController>/{id}?pass=password
         [HttpDelete("{id}")]
         public IActionResult Delete(string id, string pass)

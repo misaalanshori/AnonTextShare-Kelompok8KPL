@@ -28,6 +28,17 @@ namespace AnonTextShareStorage
 
             };
 
+        public static Kategori kategoriFromString(string kategoriCari)
+        {
+            for (int i = 0; i < kategoriDokumen.Length; i++)
+            {
+                if (kategoriDokumen[i].Equals(kategoriCari) {
+                    return (Kategori)i;
+                }
+            }
+            return Kategori.LAIN;
+        }
+
         class Dokumen
         {
             private string namaDokumen;

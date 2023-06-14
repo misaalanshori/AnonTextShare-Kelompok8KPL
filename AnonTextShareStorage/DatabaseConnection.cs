@@ -19,7 +19,7 @@
         public abstract string? getDocumentCategoryString(string id);
         public abstract KategoriDokumen.Kategori? getDocumentCategory(string id);
         public abstract bool triggerDocumentLock(string id, EditingAutomata.Trigger trigger, string pass);
-        public abstract EditingAutomata.State? getDocumentLock(string id, string pass);
+        public abstract EditingAutomata.State? getDocumentLock(string id);
         public abstract bool reportDocument(string id);
         public abstract bool unlockDocument(string id, string pass);
         public abstract int getReportCount(string id);

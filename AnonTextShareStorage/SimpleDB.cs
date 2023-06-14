@@ -235,9 +235,9 @@ namespace AnonTextShareStorage
             return false;
         }
 
-        public override EditingAutomata.State? getDocumentLock(string id, string pass)
+        public override EditingAutomata.State? getDocumentLock(string id)
         {
-            if (CheckDocument(id, pass))
+            if (CheckDocument(id))
             {
                 return docLock[id];
             }
