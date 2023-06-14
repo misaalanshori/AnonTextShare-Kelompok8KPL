@@ -6,28 +6,32 @@ using System.Threading.Tasks;
 
 namespace AnonTextShareStorage
 {
-    internal class KategoriDokumen
+    public class KategoriDokumen
     {
-        enum Kategori
+        public enum Kategori
         {
+            LAIN,
             POLITIK,
             OLAHRAGA,
             BISNIS,
             HIBURAN
         }
 
-        class Dokumen
-        {
-            private string namaDokumen;
-            private Kategori kategori;
 
-            private static string[] kategoriDokumen = new string[]
+        public static string[] kategoriDokumen { get; } = new string[]
             {
+                "Lainnya",
                 "Politik",
                 "Olahraga",
                 "Bisnis",
                 "Hiburan"
+
             };
+
+        class Dokumen
+        {
+            private string namaDokumen;
+            private Kategori kategori;
 
             public Dokumen(string namaDokumen, Kategori kategori)
             {

@@ -22,6 +22,10 @@ namespace AnonTextShareStorage
         private Dictionary<string, string> docContent = new();
         private Dictionary<string, int> docViews = new();
         private Dictionary<string, List<string>> docComments = new();
+        private Dictionary<string, KategoriDokumen.Kategori> docCategory = new();
+        private Dictionary<string, EditingAutomata.State> docLock = new();
+        private Dictionary<string, int> docReportCount = new();
+        private Dictionary<string, ReportingHabli.State> docReportState = new();
 
         // Collection Storage
         private Dictionary<string, string> colPass = new();
@@ -53,7 +57,7 @@ namespace AnonTextShareStorage
         }
 
         // Document Methods
-        public override string CreateDocument(string title, string text)
+        public override string CreateDocument(string title, string text, KategoriDokumen.Kategori category)
         {
             try
             {
@@ -63,16 +67,20 @@ namespace AnonTextShareStorage
                 docContent.Add(key, text);
                 docViews.Add(key, 0);
                 docComments.Add(key, new List<string>());
+                docCategory.Add(key, category);
+                docLock.Add(key, EditingAutomata.State.UnLocked);
+                docReportCount.Add(key, 0);
+                docReportState.Add(key, ReportingHabli.State.Safe);
                 return key;
             }
             catch (ArgumentException e)
             {
-                return CreateDocument(title, text);
+                return CreateDocument(title, text, category);
             }
         } // return string id document, password isi empty string
 
 
-        public override string CreateDocument(string title, string text, string pass)
+        public override string CreateDocument(string title, string text, KategoriDokumen.Kategori category, string pass)
         {
             Debug.Assert(pass.Length > 4);
             string passkey = SHA256Hash(pass);
@@ -84,11 +92,15 @@ namespace AnonTextShareStorage
                 docContent.Add(key, text);
                 docViews.Add(key, 0);
                 docComments.Add(key, new List<string>());
+                docCategory.Add(key, category);
+                docLock.Add(key, EditingAutomata.State.UnLocked);
+                docReportCount.Add(key, 0);
+                docReportState.Add(key, ReportingHabli.State.Safe);
                 return key;
             }
             catch (ArgumentException e)
             {
-                return CreateDocument(title, text, pass);
+                return CreateDocument(title, text, category, pass);
             }
 
         } // return string id document, simpan password di hash
@@ -182,8 +194,96 @@ namespace AnonTextShareStorage
             {
                 return docComments[id];
             }
-            return null;        }
+            return null;
+        }
 
+        public override bool updateDocumentCategory(string id, KategoriDokumen.Kategori category, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                docCategory[id] = category;
+                return true;
+            }
+            return false;
+        }
+
+        public override string? getDocumentCategoryString(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return KategoriDokumen.kategoriDokumen[(int)docCategory[id]] ;
+            }
+            return null;
+        }
+
+        public override KategoriDokumen.Kategori? getDocumentCategory(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return docCategory[id];
+            }
+            return null;
+        }
+
+        public override bool triggerDocumentLock(string id, EditingAutomata.Trigger trigger, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                docLock[id] = EditingAutomata.getNextState(docLock[id], trigger);
+                return true;
+            }
+            return false;
+        }
+
+        public override EditingAutomata.State? getDocumentLock(string id, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                return docLock[id];
+            }
+            return null;
+        }
+
+        public override bool reportDocument(string id)
+        {
+            if (CheckDocument(id))
+            {
+                docReportCount[id] = docReportCount[id] + 1;
+                if (docReportCount[id] % 10 == 0)
+                {
+                    docReportState[id] = ReportingHabli.GetNextState(docReportState[id], ReportingHabli.Trigger.Escalate);
+                }
+            }
+            return false;
+        }
+
+        public override bool unlockDocument(string id, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                docReportState[id] = ReportingHabli.GetNextState(docReportState[id], ReportingHabli.Trigger.Unlock);
+                return true;
+            }
+            return false;
+        }
+
+        public override int getReportCount(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return docReportCount[id];
+            }
+            return -1;
+        }
+
+        public override ReportingHabli.State? getReportState(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return docReportState[id];
+            }
+            return null;
+        }
 
         // Collection methods
         public override string CreateCollection(string title, List<string> contents)

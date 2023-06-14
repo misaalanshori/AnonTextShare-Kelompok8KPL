@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnonTextShareStorage
 {
-    internal class EditingAutomata
+    public class EditingAutomata
     {
         public enum State
         {
@@ -43,7 +43,7 @@ namespace AnonTextShareStorage
 
         public State current;
 
-        public State getNextState(State prevState, Trigger trigger)
+        public static State getNextState(State prevState, Trigger trigger)
         {
             State nextState = prevState;
             for (int i = 0; i < tr.Length; i++)

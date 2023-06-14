@@ -3,8 +3,8 @@
     public abstract class DatabaseConnection
     {
         // Document methods
-        public abstract string CreateDocument(string title, string text); // return string id document, password isi null
-        public abstract string CreateDocument(string title, string text, string pass); // return string id document, simpan password di hash
+        public abstract string CreateDocument(string title, string text, KategoriDokumen.Kategori category); // return string id document, password isi null
+        public abstract string CreateDocument(string title, string text, KategoriDokumen.Kategori category, string pass); // return string id document, simpan password di hash
         public abstract bool CheckDocument(string id); // return true jika dokumen ditemukan
         public abstract bool CheckDocument(string id, string pass); // return true jika dokumen ditemukan dan pass benar
         public abstract string? GetDocumentTitle(string id);
@@ -15,7 +15,15 @@
         public abstract int GetDocumentViews(string id); // Document Views di increment setiap GetDocumentText dipanggil
         public abstract bool AddDocumentComment(string id, string text);
         public abstract List<string>? GetDocumentComments(string id);
-
+        public abstract bool updateDocumentCategory(string id, KategoriDokumen.Kategori category, string pass);
+        public abstract string? getDocumentCategoryString(string id);
+        public abstract KategoriDokumen.Kategori? getDocumentCategory(string id);
+        public abstract bool triggerDocumentLock(string id, EditingAutomata.Trigger trigger, string pass);
+        public abstract EditingAutomata.State? getDocumentLock(string id, string pass);
+        public abstract bool reportDocument(string id);
+        public abstract bool unlockDocument(string id, string pass);
+        public abstract int getReportCount(string id);
+        public abstract ReportingHabli.State? getReportState(string id);
         // Collection methods
         public abstract string CreateCollection(string title, List<string> contents); // return string id collection, password isi null
         public abstract string CreateCollection(string title, List<string> contents, string pass); // return string id collection, simpan password di hash
