@@ -130,7 +130,7 @@
             // 
             // textBox1
             // 
-            textBox1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             textBox1.Location = new Point(6, 35);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(767, 35);

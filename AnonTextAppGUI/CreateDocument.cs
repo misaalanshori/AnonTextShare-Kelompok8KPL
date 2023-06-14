@@ -21,6 +21,7 @@ namespace AnonTextAppGUI
         {
             InitializeComponent();
             button1.BackColor = Color.Gray;
+            checkBox1.Checked = false;
         }
 
         private void CreateDocument_Load(object sender, EventArgs e)
@@ -39,26 +40,29 @@ namespace AnonTextAppGUI
             if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(richTextBox1.Text))
             {
                 button1.BackColor = Color.Red;
-                MessageBox.Show("Fill the document first!");
+
+                // Show dialog box status
+                MessageBox.Show("Fill the document first!","Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 button1.BackColor = Color.Gray;
             }
             else if (!string.IsNullOrWhiteSpace(textBox1.Text) && !string.IsNullOrWhiteSpace(richTextBox1.Text))
             {
                 button1.BackColor = Color.Green;
 
-                // Set title and contents
-                AnonTextShareAPI.TextDocument document = new AnonTextShareAPI.TextDocument();
-                document.title = textBox1.Text;
-                document.contents = richTextBox1.Text;
-
                 // Set document to Client API
                 CreateDocumentController controller = new CreateDocumentController();
                 controller.ClientAPISetter();
 
-                MessageBox.Show("Submited");
+                // Show dialog box status
+                MessageBox.Show("Submited","Status",MessageBoxButtons.OK,MessageBoxIcon.Information);
+
                 // Reset String
                 textBox1.Text = string.Empty;
                 richTextBox1.Text = string.Empty;
+                textBox2.Text = string.Empty;
+                checkBox1.Checked = false;
+
                 button1.BackColor = Color.White;
             };
         }
@@ -90,7 +94,7 @@ namespace AnonTextAppGUI
                 string[] words2 = text2.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
                 wordCount = words2.Length;
             }
-            label4.Text = "" + wordCount + "/32";
+            label4.Text = "" + wordCount + "/" + rc.MaxTitleChars;
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -120,7 +124,7 @@ namespace AnonTextAppGUI
                 string[] words2 = text2.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
                 wordCount = words2.Length;
             }
-            label5.Text = "" + wordCount + "/128";
+            label5.Text = "" + wordCount + "/" + rc.MaxTextChars;
         }
 
         private void label1_Click(object sender, EventArgs e)
