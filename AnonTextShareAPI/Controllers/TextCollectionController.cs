@@ -131,63 +131,6 @@ namespace AnonTextShareAPI.Controllers
             }
         }
 
-        // POST api/<TextCollectionController>/{id}/report
-        [HttpGet("{id}/report")]
-        public ActionResult<TextCollection> PostReport(string id)
-        {
-            if (Config.db.CheckCollection(id))
-            {
-                Config.db.ReportDocument(id);
-                return Ok();
-            }
-            else
-            {
-                return NotFound("Collection does not exist");
-            }
-        }
-
-        // POST api/<TextCollectionController>/{id}/report/unlock
-        [HttpGet("{id}/report/unlock")]
-        public ActionResult<TextCollection> PostReportUnlock(string id, [FromBody] string pass)
-        {
-            if (Config.db.UnlockDocument(id, pass))
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound("Collection does not exist");
-            }
-        }
-
-        // POST api/<TextCollectionController>/{id}/lock
-        [HttpGet("{id}/lock")]
-        public ActionResult<TextCollection> PostLock(string id, [FromBody] string pass)
-        {
-            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound("Collection does not exist");
-            }
-        }
-
-        // POST api/<TextCollectionController>/{id}/unlock
-        [HttpGet("{id}/unlock")]
-        public ActionResult<TextCollection> PostUnlock(string id, [FromBody] string pass)
-        {
-            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound("Collection does not exist");
-            }
-        }
-
         // DELETE api/<TextCollectionController>/{id}?pass=password
         [HttpDelete("{id}")]
         public IActionResult Delete(string id, string pass)

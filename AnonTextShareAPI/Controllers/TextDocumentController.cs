@@ -137,6 +137,65 @@ namespace AnonTextShareAPI.Controllers
             }
         }
 
+
+        // POST api/<TextDocumentController>/{id}/report
+        [HttpGet("{id}/report")]
+        public ActionResult PostReport(string id)
+        {
+            if (Config.db.CheckCollection(id))
+            {
+                Config.db.ReportDocument(id);
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextDocumentController>/{id}/report/unlock?pass=password
+        [HttpGet("{id}/report/unlock")]
+        public ActionResult PostReportUnlock(string id, string pass)
+        {
+            if (Config.db.UnlockDocument(id, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextDocumentController>/{id}/lock?pass=password
+        [HttpGet("{id}/lock")]
+        public ActionResult PostLock(string id, string pass)
+        {
+            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+        // POST api/<TextDocumentController>/{id}/unlock?pass=password
+        [HttpGet("{id}/unlock")]
+        public ActionResult PostUnlock(string id, string pass)
+        {
+            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("Collection does not exist");
+            }
+        }
+
+
         // DELETE api/<TextDocumentController>/{id}?pass=password
         [HttpDelete("{id}")]
         public IActionResult Delete(string id, string pass)
