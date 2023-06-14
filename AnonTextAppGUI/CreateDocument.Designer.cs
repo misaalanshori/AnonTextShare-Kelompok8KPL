@@ -35,6 +35,8 @@
             textBox1 = new TextBox();
             richTextBox1 = new RichTextBox();
             button1 = new Button();
+            label4 = new Label();
+            label5 = new Label();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -49,6 +51,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(label4);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(textBox1);
@@ -81,14 +85,16 @@
             // 
             // textBox1
             // 
+            textBox1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             textBox1.Location = new Point(6, 35);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(767, 26);
+            textBox1.Size = new Size(767, 35);
             textBox1.TabIndex = 1;
             textBox1.TextChanged += textBox1_TextChanged;
             // 
             // richTextBox1
             // 
+            richTextBox1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             richTextBox1.Location = new Point(6, 97);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(767, 266);
@@ -105,6 +111,26 @@
             button1.Text = "Publish";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = SystemColors.ControlDarkDark;
+            label4.Location = new Point(748, 13);
+            label4.Name = "label4";
+            label4.Size = new Size(25, 19);
+            label4.TabIndex = 4;
+            label4.Text = "32";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = SystemColors.ControlDarkDark;
+            label5.Location = new Point(740, 75);
+            label5.Name = "label5";
+            label5.Size = new Size(33, 19);
+            label5.TabIndex = 5;
+            label5.Text = "128";
             // 
             // CreateDocument
             // 
@@ -132,5 +158,7 @@
         private TextBox textBox1;
         private RichTextBox richTextBox1;
         private Button button1;
+        private Label label5;
+        private Label label4;
     }
 }
