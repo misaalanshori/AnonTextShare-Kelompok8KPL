@@ -37,10 +37,6 @@ namespace AnonTextAppGUI
             }
         }
 
-        public void DeleteData()
-        {
-            ClientAPI.deleteDocument(_id,_password);
-        }
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -57,7 +53,7 @@ namespace AnonTextAppGUI
         {
             if (textBox2.Text.Length > 0)
             {
-                this.textBox3.Text = _collection.id + " - " + _collection.title + "\n";
+                this.textBox3.Text = ClientAPI.changeCollectionsTitle(_id, _password, textBox2.Text);
             }
         }
 
@@ -76,7 +72,12 @@ namespace AnonTextAppGUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DeleteData();
+            this.textBox3.Text = ClientAPI.deleteCollections(_id, _password);
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
