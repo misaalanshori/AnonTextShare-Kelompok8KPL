@@ -150,6 +150,7 @@
             Controls.Add(label1);
             Name = "CreateCollection";
             Text = "CreateCollection";
+            FormClosing += CreateCollection_FormClosing;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);

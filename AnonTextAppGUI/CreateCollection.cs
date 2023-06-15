@@ -59,5 +59,11 @@ namespace AnonTextAppGUI
         {
             Clipboard.SetText(textBox4.Text);
         }
+
+        private void CreateCollection_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            IController.s_ControllerGUI.CreateCollectionToMenu();
+            e.Cancel = true;
+        }
     }
 }
