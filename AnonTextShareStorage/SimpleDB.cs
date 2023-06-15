@@ -253,6 +253,7 @@ namespace AnonTextShareStorage
                 {
                     _docReportState[id] = ReportingHabli.GetNextState(_docReportState[id], ReportingHabli.Trigger.Escalate);
                 }
+                return true;
             }
             return false;
         }

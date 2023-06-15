@@ -15,7 +15,12 @@ namespace AnonTextShareAPI.Controllers
         {
             if (Config.db.CheckDocument(id))
             {
-                return new TextDocument(id);
+                TextDocument txt = new TextDocument(id);
+                if (txt.ReportState.Equals("Locked"))
+                {
+                    return BadRequest("Document is locked, please wait for the author to unlock the document");
+                }
+                return txt;
             }
             else
             {
@@ -142,14 +147,13 @@ namespace AnonTextShareAPI.Controllers
         [HttpGet("{id}/report")]
         public ActionResult PostReport(string id)
         {
-            if (Config.db.CheckCollection(id))
+            if (Config.db.ReportDocument(id))
             {
-                Config.db.ReportDocument(id);
                 return Ok();
             }
             else
             {
-                return NotFound("Collection does not exist");
+                return NotFound("Document does not exist");
             }
         }
 
@@ -163,7 +167,7 @@ namespace AnonTextShareAPI.Controllers
             }
             else
             {
-                return NotFound("Collection does not exist");
+                return NotFound("Document does not exist");
             }
         }
 
@@ -177,7 +181,7 @@ namespace AnonTextShareAPI.Controllers
             }
             else
             {
-                return NotFound("Collection does not exist");
+                return NotFound("Document does not exist");
             }
         }
 
@@ -185,13 +189,13 @@ namespace AnonTextShareAPI.Controllers
         [HttpGet("{id}/unlock")]
         public ActionResult PostUnlock(string id, string pass)
         {
-            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.Editing, pass))
+            if (Config.db.TriggerDocumentLock(id, AnonTextShareStorage.EditingAutomata.Trigger.NotEditing, pass))
             {
                 return Ok();
             }
             else
             {
-                return NotFound("Collection does not exist");
+                return NotFound("Document does not exist");
             }
         }
 

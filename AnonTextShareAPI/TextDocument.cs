@@ -11,9 +11,9 @@ namespace AnonTextShareAPI
         public int? Views { get; internal set; }
         public string? Kategori { get; set; }
         public bool IsExplicit => !KeywordFilter.FilterText(Contents);
-        public bool IsLocked { get; set; }
-        public int ReportCount { get; set; }
-        public string? ReportState { get; set; }
+        public bool IsLocked { get; internal set; }
+        public int ReportCount { get; internal set; }
+        public string? ReportState { get; internal set; }
 
 
         public TextDocument() { }
@@ -35,7 +35,7 @@ namespace AnonTextShareAPI
             this.Kategori = Config.db.GetDocumentCategoryString(id);
             this.ReportCount = Config.db.GetReportCount(id);
             this.ReportState = Config.db.GetReportState(id).ToString();
-
+            this.IsLocked = Config.db.GetDocumentLock(id) == EditingAutomata.State.Locked ? true : false;
         }
 
     }
