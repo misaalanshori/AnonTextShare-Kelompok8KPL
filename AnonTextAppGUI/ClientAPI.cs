@@ -36,9 +36,9 @@ namespace AnonTextAppConsoleUI
 			}
 		}
 
-		public static async Task<string> createDocument(string title, string content, string password)
+		public static async Task<string> createDocument(string title, string content, string kategori, string password)
 		{
-			TextDocument newDoc = new TextDocument(title, content);
+			TextDocument newDoc = new TextDocument(title, content, kategori);
 			if (password != null)
 			{
 				response = await client.PostAsJsonAsync(address + "/api/TextDocument?pass=" + password, newDoc);
