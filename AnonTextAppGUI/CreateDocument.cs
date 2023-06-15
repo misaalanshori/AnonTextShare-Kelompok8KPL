@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace AnonTextAppGUI
 {
-    public partial class CreateDocument : Form
+    public partial class CreateDocument : Form, IController
     {
         public CreateDocument()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            IController.s_ControllerGUI.CreateDocumentToMenu();
         }
     }
 }

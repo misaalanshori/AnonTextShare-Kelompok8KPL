@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace AnonTextAppGUI
 {
-    public partial class CreateCollection : Form
+    public partial class CreateCollection : Form, IController
     {
         public CreateCollection()
         {
