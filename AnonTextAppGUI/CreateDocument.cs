@@ -25,6 +25,12 @@ namespace AnonTextAppGUI
             InitializeComponent();
             button1.BackColor = Color.Gray;
             checkBox1.Checked = false;
+
+            // Reset String
+            textBox1.Text = string.Empty;
+            richTextBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+            checkBox1.Checked = false;
         }
 
         private void CreateDocument_Load(object sender, EventArgs e)
@@ -45,7 +51,7 @@ namespace AnonTextAppGUI
                 button1.BackColor = Color.Red;
 
                 // Show dialog box status
-                MessageBox.Show("Fill the document first!","Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Fill the document first!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 button1.BackColor = Color.Gray;
             }
@@ -54,11 +60,10 @@ namespace AnonTextAppGUI
                 button1.BackColor = Color.Green;
 
                 // Set document to Client API
-                CreateDocumentController controller = new CreateDocumentController();
-                controller.ClientAPISetter();
+                ClientAPI.AddContents(textBox1.Text,richTextBox1.Text,textBox2.Text);
 
                 // Show dialog box status
-                MessageBox.Show("Submited","Status",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show("Submited", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Reset String
                 textBox1.Text = string.Empty;
@@ -70,61 +75,17 @@ namespace AnonTextAppGUI
             };
         }
 
-        private void textBox1_KeyPress(object sender, EventArgs e) {}
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
-            // Make a word cap in textBox
-            string text = textBox1.Text;
-            string[] words = text.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-            if (text.Length > rc.MaxTitleChars)
-            {
-                // Get the first 32 words and join them back into a string
-                string limitedText = string.Join(" ", words.Take(rc.MaxTitleChars));
-                textBox1.Text = limitedText;
-
-                // Set the cursor position at the end of the text box
-                textBox1.SelectionStart = textBox1.Text.Length;
-                textBox1.SelectionLength = 0;
-            }
-
             // Changing word counter label
-            string text2 = textBox1.Text.Trim();
-            int wordCount = 0;
-            if (!string.IsNullOrEmpty(text2))
-            {
-                string[] words2 = text2.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-                wordCount = words2.Length;
-            }
+            int wordCount = textBox1.TextLength;
             label4.Text = "" + wordCount + "/" + rc.MaxTitleChars;
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-
-            // Make a word cap in richTextBox
-            string text = richTextBox1.Text;
-            string[] words = text.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-            if (words.Length > rc.MaxTextChars)
-            {
-                // Get the first 128 words and join them back into a string
-                string limitedText = string.Join(" ", words.Take(rc.MaxTextChars));
-                richTextBox1.Text = limitedText;
-
-                // Set the cursor position at the end of the text box
-                richTextBox1.SelectionStart = richTextBox1.Text.Length;
-                richTextBox1.SelectionLength = 0;
-            }
-
             // Changing word counter label
-            string text2 = richTextBox1.Text.Trim();
-            int wordCount = 0;
-            if (!string.IsNullOrEmpty(text2))
-            {
-                string[] words2 = text2.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-                wordCount = words2.Length;
-            }
+            int wordCount = richTextBox1.TextLength;
             label5.Text = "" + wordCount + "/" + rc.MaxTextChars;
         }
 
@@ -136,6 +97,26 @@ namespace AnonTextAppGUI
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             textBox2.UseSystemPasswordChar = !checkBox1.Checked;
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the length of the text exceeds the maximum length
+            if (textBox1.TextLength >= rc.MaxTitleChars && e.KeyChar != '\b')
+            {
+                // Cancel the input by marking it as handled
+                e.Handled = true;
+            }
+        }
+
+        private void richTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the length of the text exceeds the maximum length
+            if (richTextBox1.TextLength >= rc.MaxTextChars && e.KeyChar != '\b')
+            {
+                // Cancel the input by marking it as handled
+                e.Handled = true;
+            }
         }
 
         public string title { get { return textBox1.Text; } }

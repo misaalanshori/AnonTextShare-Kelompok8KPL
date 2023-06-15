@@ -91,7 +91,7 @@
             // 
             label5.AutoSize = true;
             label5.ForeColor = SystemColors.ControlDarkDark;
-            label5.Location = new Point(727, 86);
+            label5.Location = new Point(714, 88);
             label5.Name = "label5";
             label5.Size = new Size(46, 19);
             label5.TabIndex = 5;
@@ -101,7 +101,7 @@
             // 
             label4.AutoSize = true;
             label4.ForeColor = SystemColors.ControlDarkDark;
-            label4.Location = new Point(735, 13);
+            label4.Location = new Point(722, 13);
             label4.Name = "label4";
             label4.Size = new Size(38, 19);
             label4.TabIndex = 4;
@@ -136,6 +136,7 @@
             textBox1.Size = new Size(767, 35);
             textBox1.TabIndex = 1;
             textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.KeyPress += textBox1_KeyPress;
             // 
             // richTextBox1
             // 
@@ -146,6 +147,7 @@
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
+            richTextBox1.KeyPress += richTextBox1_KeyPress;
             // 
             // button1
             // 
