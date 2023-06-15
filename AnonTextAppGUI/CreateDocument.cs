@@ -17,6 +17,9 @@ namespace AnonTextAppGUI
 {
     public partial class CreateDocument : Form
     {
+        // Creating Runtime config for max title and text
+        RuntimeConfig rc = new RuntimeConfig(32, 128);
+
         public CreateDocument()
         {
             InitializeComponent();
@@ -67,15 +70,15 @@ namespace AnonTextAppGUI
             };
         }
 
+        private void textBox1_KeyPress(object sender, EventArgs e) {}
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            // Creating Runtime config for max title and text
-            RuntimeConfig rc = new RuntimeConfig(32, 128);
 
             // Make a word cap in textBox
             string text = textBox1.Text;
             string[] words = text.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries); // Split text to words
-            if (words.Length > rc.MaxTitleChars)
+            if (text.Length > rc.MaxTitleChars)
             {
                 // Get the first 32 words and join them back into a string
                 string limitedText = string.Join(" ", words.Take(rc.MaxTitleChars));
@@ -99,8 +102,6 @@ namespace AnonTextAppGUI
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            // Creating Runtime config for max title and text
-            RuntimeConfig rc = new RuntimeConfig(32, 128);
 
             // Make a word cap in richTextBox
             string text = richTextBox1.Text;
