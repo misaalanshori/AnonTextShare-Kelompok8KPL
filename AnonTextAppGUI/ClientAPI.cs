@@ -76,8 +76,49 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Contents Updated");
         }
 
+        public static async Task updateCategory(string id, string password, string category)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/kategori?pass={password}";
+            var requestContent = new StringContent($"\"{category}\"", Encoding.UTF8, "application/json-patch+json");
 
-		public static async Task<TextCollection> getCollection(string id)
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
+            Console.WriteLine("Updated");
+        }
+
+		public static async Task reportDocument(string id)
+		{
+			var requestUrl = $"{address}/api/TextDocument/{id}/report";
+			var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+			response = await client.SendAsync(request);
+		}
+
+		public static async Task unblockDocument(string id, string password)
+		{
+            var requestUrl = $"{address}/api/TextDocument/{id}/report/unlock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+		public static async Task lockDocument(string id, string password)
+		{
+            var requestUrl = $"{address}/api/TextDocument/{id}/lock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+        public static async Task unlockDocument(string id, string password)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/unlock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+
+        public static async Task<TextCollection> getCollection(string id)
 		{
 			response = await client.GetAsync(address + "/api/TextCollection/" + id);
 			if (response.IsSuccessStatusCode)
