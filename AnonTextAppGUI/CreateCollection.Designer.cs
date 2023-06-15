@@ -35,8 +35,9 @@
             textBox2 = new TextBox();
             textBox4 = new TextBox();
             groupBox1 = new GroupBox();
-            button1 = new Button();
             textBox3 = new TextBox();
+            button1 = new Button();
+            button2 = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -90,7 +91,8 @@
             textBox4.Location = new Point(12, 415);
             textBox4.Name = "textBox4";
             textBox4.PlaceholderText = "Collection Code";
-            textBox4.Size = new Size(499, 23);
+            textBox4.ReadOnly = true;
+            textBox4.Size = new Size(418, 23);
             textBox4.TabIndex = 6;
             // 
             // groupBox1
@@ -103,6 +105,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Document Codes";
             // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(6, 22);
+            textBox3.Multiline = true;
+            textBox3.Name = "textBox3";
+            textBox3.PlaceholderText = "One document code per line";
+            textBox3.Size = new Size(487, 255);
+            textBox3.TabIndex = 0;
+            // 
             // button1
             // 
             button1.Location = new Point(388, 55);
@@ -111,20 +122,24 @@
             button1.TabIndex = 8;
             button1.Text = "Submit";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
-            // textBox3
+            // button2
             // 
-            textBox3.Location = new Point(6, 22);
-            textBox3.Multiline = true;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(487, 255);
-            textBox3.TabIndex = 0;
+            button2.Location = new Point(436, 415);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 9;
+            button2.Text = "Copy";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // CreateCollection
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(523, 450);
+            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
             Controls.Add(textBox4);
@@ -152,5 +167,6 @@
         private GroupBox groupBox1;
         private TextBox textBox3;
         private Button button1;
+        private Button button2;
     }
 }
