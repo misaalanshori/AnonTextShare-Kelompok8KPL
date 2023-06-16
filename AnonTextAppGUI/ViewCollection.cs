@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace AnonTextAppGUI
 {
-    public partial class ViewCollection : Form
+    public partial class ViewCollection : Form, IController
     {
 
         private string _id;
@@ -22,7 +22,7 @@ namespace AnonTextAppGUI
             InitializeComponent();
         }
 
-        public void SetCollection(string id,  string password)
+        public void SetCollection(string id, string password)
         {
             _id = id;
             _password = password;
@@ -84,6 +84,12 @@ namespace AnonTextAppGUI
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void ViewCollection_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            IController.s_ControllerGUI.ViewCollectionToMenu();
+            e.Cancel = true;
         }
     }
 }
