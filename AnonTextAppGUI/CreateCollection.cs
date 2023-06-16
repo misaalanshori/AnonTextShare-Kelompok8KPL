@@ -59,8 +59,31 @@ namespace AnonTextAppGUI
 
         private void CreateCollection_FormClosing(object sender, FormClosingEventArgs e)
         {
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+            textBox3.Text = string.Empty;
+            textBox4.Text = string.Empty;
+            textBox2.PasswordChar = '*';
             IController.s_ControllerGUI.CreateCollectionToMenu();
             e.Cancel = true;
+        }
+
+        private void CreateCollection_Load(object sender, EventArgs e)
+        {
+            textBox2.PasswordChar = '*';
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!textBox2.PasswordChar.Equals('*'))
+            {
+                textBox2.PasswordChar = '*';
+                button3.Text = "Show";
+            } else
+            {
+                textBox2.PasswordChar = '\0';
+                button3.Text = "Hide";
+            }
         }
     }
 }

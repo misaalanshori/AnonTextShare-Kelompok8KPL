@@ -38,6 +38,7 @@
             textBox3 = new TextBox();
             button1 = new Button();
             button2 = new Button();
+            button3 = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -83,7 +84,7 @@
             textBox2.Location = new Point(82, 87);
             textBox2.Name = "textBox2";
             textBox2.PlaceholderText = "Collection Password (Optional)";
-            textBox2.Size = new Size(300, 23);
+            textBox2.Size = new Size(240, 23);
             textBox2.TabIndex = 4;
             // 
             // textBox4
@@ -134,11 +135,22 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // button3
+            // 
+            button3.Location = new Point(328, 87);
+            button3.Name = "button3";
+            button3.Size = new Size(54, 23);
+            button3.TabIndex = 10;
+            button3.Text = "Show";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // CreateCollection
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(523, 450);
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
@@ -151,6 +163,7 @@
             Name = "CreateCollection";
             Text = "CreateCollection";
             FormClosing += CreateCollection_FormClosing;
+            Load += CreateCollection_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
@@ -169,5 +182,6 @@
         private TextBox textBox3;
         private Button button1;
         private Button button2;
+        private Button button3;
     }
 }
