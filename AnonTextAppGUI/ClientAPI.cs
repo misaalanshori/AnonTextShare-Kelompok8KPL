@@ -12,7 +12,7 @@ namespace AnonTextAppConsoleUI
         static HttpResponseMessage response;
 		static string address = new APIAddress.readWrite().config.Address;
 
-		public static async Task<TextDocument> getDocument(string id)
+		public static async Task<TextDocument> GetDocument(string id)
 		{
 			response = await client.GetAsync(address + "/api/TextDocument/" + id);
 			if (response.IsSuccessStatusCode)
@@ -23,7 +23,7 @@ namespace AnonTextAppConsoleUI
 			return null;
 		}
 
-		public static async Task deleteDocument(string id, string password)
+		public static async Task DeleteDocument(string id, string password)
 		{
 			response = await client.DeleteAsync($"{address}/api/TextDocument/{id}?pass={password}");
 			if (response.IsSuccessStatusCode)
@@ -36,9 +36,9 @@ namespace AnonTextAppConsoleUI
 			}
 		}
 
-		public static async Task<string> createDocument(string title, string content, string password)
+		public static async Task<string> CreateDocument(string title, string content, string kategori, string password)
 		{
-			TextDocument newDoc = new TextDocument();
+			TextDocument newDoc = new TextDocument(title, content, kategori);
 			if (password != null)
 			{
 				response = await client.PostAsJsonAsync(address + "/api/TextDocument?pass=" + password, newDoc);
@@ -50,7 +50,7 @@ namespace AnonTextAppConsoleUI
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
-		public static async Task changeTitle(string id, string password, string newTitle)
+		public static async Task ChangeTitle(string id, string password, string newTitle)
 		{
             var requestUrl = $"{address}/api/TextDocument/{id}/title?pass={password}";
             var requestContent = new StringContent($"\"{newTitle}\"", Encoding.UTF8, "application/json-patch+json");
@@ -63,7 +63,7 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Title Updated");
         }
 
-        public static async Task updateContent(string id, string password, string content)
+        public static async Task UpdateContent(string id, string password, string content)
         {
             var requestUrl = $"{address}/api/TextDocument/{id}/contents?pass={password}";
             var requestContent = new StringContent($"\"{content}\"", Encoding.UTF8, "application/json-patch+json");
@@ -76,7 +76,7 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Contents Updated");
         }
 
-        public static async Task updateCategory(string id, string password, string category)
+        public static async Task UpdateCategory(string id, string password, string category)
         {
             var requestUrl = $"{address}/api/TextDocument/{id}/kategori?pass={password}";
             var requestContent = new StringContent($"\"{category}\"", Encoding.UTF8, "application/json-patch+json");
@@ -89,28 +89,28 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Updated");
         }
 
-		public static async Task reportDocument(string id)
+		public static async Task ReportDocument(string id)
 		{
 			var requestUrl = $"{address}/api/TextDocument/{id}/report";
 			var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
 			response = await client.SendAsync(request);
 		}
 
-		public static async Task unblockDocument(string id, string password)
+		public static async Task UnblockDocument(string id, string password)
 		{
             var requestUrl = $"{address}/api/TextDocument/{id}/report/unlock?pass={password}";
             var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             response = await client.SendAsync(request);
         }
 
-		public static async Task lockDocument(string id, string password)
+		public static async Task LockDocument(string id, string password)
 		{
             var requestUrl = $"{address}/api/TextDocument/{id}/lock?pass={password}";
             var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             response = await client.SendAsync(request);
         }
 
-        public static async Task unlockDocument(string id, string password)
+        public static async Task UnlockDocument(string id, string password)
         {
             var requestUrl = $"{address}/api/TextDocument/{id}/unlock?pass={password}";
             var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
@@ -118,7 +118,7 @@ namespace AnonTextAppConsoleUI
         }
 
 
-        public static async Task<TextCollection> getCollection(string id)
+        public static async Task<TextCollection> GetCollection(string id)
 		{
 			response = await client.GetAsync(address + "/api/TextCollection/" + id);
 			if (response.IsSuccessStatusCode)
@@ -129,7 +129,7 @@ namespace AnonTextAppConsoleUI
 			return null;
 		}
 
-		public static async Task deleteCollections(string id, string password)
+		public static async Task DeleteCollections(string id, string password)
 		{
 			response = await client.DeleteAsync($"{address}/api/TextCollection/{id}?pass={password}");
             if (response.IsSuccessStatusCode)
@@ -142,7 +142,7 @@ namespace AnonTextAppConsoleUI
             }
         }
 
-		public static async Task<string> createCollection(string title, string password, List<string> contents)
+		public static async Task<string> CreateCollection(string title, string password, List<string> contents)
 		{
 			if (password != null)
 			{
@@ -155,7 +155,7 @@ namespace AnonTextAppConsoleUI
 			return response.Content.ReadAsStringAsync().Result;
 		}
 
-		public static async Task changeCollectionsTitle(string id, string password, string newTitle)
+		public static async Task ChangeCollectionsTitle(string id, string password, string newTitle)
 		{
             var requestUrl = $"{address}/api/TextCollection/{id}/title?pass={password}";
             var requestContent = new StringContent($"\"{newTitle}\"", Encoding.UTF8, "application/json-patch+json");
@@ -181,7 +181,7 @@ namespace AnonTextAppConsoleUI
             Console.WriteLine("Content Added");
         }
 
-		public static async Task deleteContent(string id, string password, string textID)
+		public static async Task DeleteContent(string id, string password, string textID)
 		{
             response = await client.DeleteAsync($"{address}/api/TextCollection/{id}/contents/{textID}?pass={password}");
             Console.WriteLine("Content Deleted");

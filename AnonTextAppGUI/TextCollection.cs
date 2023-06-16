@@ -3,20 +3,20 @@ namespace AnonTextAppConsoleUI
 {
     public class TextCollection
     {
-        public string? id { get; internal set; }
-        public string title { get; set; }
-        public List<TextDocument> contents { get; set; }
-        public int? views { get; internal set; }
+        public string? Id { get; internal set; }
+        public string Title { get; set; }
+        public List<TextDocument> Contents { get; set; }
+        public int? Views { get; internal set; }
 
         public TextCollection() { }
 
         public TextCollection(string title, List<string> contents)
         {
-            this.title = title;
-            this.contents = new();
+            this.Title = title;
+            this.Contents = new();
             foreach (string kode in contents)
             {
-                this.contents.Add(ClientAPI.getDocument(id).Result);
+                this.Contents.Add(ClientAPI.GetDocument(Id).Result);
             }
         }
     }

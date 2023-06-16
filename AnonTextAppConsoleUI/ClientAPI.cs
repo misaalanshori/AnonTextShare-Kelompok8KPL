@@ -36,9 +36,9 @@ namespace AnonTextAppConsoleUI
             }
         }
 
-        public static async Task<string> createDocument(string title, string content, string password)
+        public static async Task<string> createDocument(string title, string content, string kategori, string password)
         {
-            TextDocument newDoc = new TextDocument(title, content);
+            TextDocument newDoc = new TextDocument(title, content, kategori);
             if (password != null)
             {
                 response = await client.PostAsJsonAsync(address + "/api/TextDocument?pass=" + password, newDoc);
@@ -74,6 +74,47 @@ namespace AnonTextAppConsoleUI
             response = await client.SendAsync(request);
             Console.WriteLine(response);
             Console.WriteLine("Contents Updated");
+        }
+
+        public static async Task updateCategory(string id, string password, string category)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/kategori?pass={password}";
+            var requestContent = new StringContent($"\"{category}\"", Encoding.UTF8, "application/json-patch+json");
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUrl);
+            request.Content = requestContent;
+
+            response = await client.SendAsync(request);
+            Console.WriteLine(response);
+            Console.WriteLine("Updated");
+        }
+
+        public static async Task reportDocument(string id)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/report";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+        public static async Task unblockDocument(string id, string password)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/report/unlock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+        public static async Task lockDocument(string id, string password)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/lock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
+        }
+
+        public static async Task unlockDocument(string id, string password)
+        {
+            var requestUrl = $"{address}/api/TextDocument/{id}/unlock?pass={password}";
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            response = await client.SendAsync(request);
         }
 
 

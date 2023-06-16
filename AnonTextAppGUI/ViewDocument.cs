@@ -11,8 +11,10 @@ using System.Windows.Forms;
 
 namespace AnonTextAppGUI
 {
-    public partial class ViewDocument : Form
+    public partial class ViewDocument : Form, IController
     {
+        private string _idDocument;
+        private string _password;
         public ViewDocument()
         {
             InitializeComponent();
@@ -36,6 +38,12 @@ namespace AnonTextAppGUI
         {
             textBox1.Text = string.Empty;
 
+        }
+
+        public void SetDocument(string id, string password)
+        {
+            _idDocument = id;
+            _password = password;
         }
     }
 }
