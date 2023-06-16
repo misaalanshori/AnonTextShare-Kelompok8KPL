@@ -17,23 +17,26 @@ namespace AnonTextAppGUI
         private string _id;
         private string _password;
         private TextCollection _collection;
-        public ViewCollection(string IdCollection, string PasswordCollection)
+        public ViewCollection()
         {
-            _id = IdCollection;
-            _password = PasswordCollection;
-            _collection = ClientAPI.getCollection(IdCollection).Result;
             InitializeComponent();
         }
 
-        public void RefreshData()
+        public void SetCollection(string id,  string password)
         {
-            _collection = ClientAPI.getCollection(_id).Result;
-            this.textBox2.Text = _collection.title;
-            this.label5.Text = _collection.id;
+            _id = id;
+            _password = password;
+        }
 
-            for (int i = 0; i < _collection.contents.Count; i++)
+        public async void RefreshData()
+        {
+            _collection = await ClientAPI.GetCollection(_id);
+            this.textBox2.Text = _collection.Title;
+            this.label5.Text = _collection.Id;
+
+            for (int i = 0; i < _collection.Contents.Count; i++)
             {
-                this.textBox3.Text += _collection.id + " - " + _collection.title + "\n";
+                this.textBox3.Text += _collection.Id + " - " + _collection.Title + "\n";
             }
         }
 
@@ -49,11 +52,11 @@ namespace AnonTextAppGUI
         }
 
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
             if (textBox2.Text.Length > 0)
             {
-                this.textBox3.Text = ClientAPI.changeCollectionsTitle(_id, _password, textBox2.Text);
+                await ClientAPI.ChangeCollectionsTitle(_id, _password, textBox2.Text);
             }
         }
 
@@ -62,17 +65,20 @@ namespace AnonTextAppGUI
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             if (textBox4.Text.Length > 0)
             {
-                this.textBox3.Text = _collection.id + " - " + _collection.title + "\n";
+                await ClientAPI.AddContents(_id, _password, textBox4.Text);
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
-            this.textBox3.Text = ClientAPI.deleteCollections(_id, _password);
+            if (textBox4.Text.Length > 0)
+            {
+                await ClientAPI.DeleteContent(_id, _password, textBox4.Text);
+            }
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
