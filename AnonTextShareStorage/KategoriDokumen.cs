@@ -32,7 +32,7 @@ namespace AnonTextShareStorage
         {
             for (int i = 0; i < kategoriDokumen.Length; i++)
             {
-                if (kategoriDokumen[i].Equals(kategoriCari)) {
+                if (kategoriDokumen[i].Trim().ToLower().Equals(kategoriCari.Trim().ToLower())) {
                     return (Kategori)i;
                 }
             }
