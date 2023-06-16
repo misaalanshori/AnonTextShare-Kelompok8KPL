@@ -40,7 +40,7 @@ namespace AnonTextAppGUI
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             // Get input values
             string title = textBox1.Text.Trim();
@@ -49,7 +49,7 @@ namespace AnonTextAppGUI
             string kategori = textBox3.Text.Trim();
 
             // Check if the required fields are empty
-            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(kategori))
             {
                 // Show dialog box status if not filled
                 MessageBox.Show("Fill the document first!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -63,18 +63,22 @@ namespace AnonTextAppGUI
                 return;
             }
 
-            // Submit the document
+            // Set optional password
             string isiPassword = string.IsNullOrEmpty(password) ? null : password;
-            string isiKategori = string.IsNullOrEmpty(kategori) ? null : kategori;
 
             // Set document to Client API
-            ClientAPI.createDocument(title, text, isiKategori, isiPassword);
+            ClientAPI.createDocument(title, text, kategori, isiPassword);
 
             // Set button color to indicate submission
             button1.BackColor = Color.Green;
 
+            // Copy ID this document
+            string ID = await ClientAPI.createDocument(title, text, kategori, isiPassword);
+
             // Show dialog box status
             MessageBox.Show("Published", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Docs ID: " + ID, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Clipboard.SetText(ID);
 
             // Reset form
             textBox1.Clear();

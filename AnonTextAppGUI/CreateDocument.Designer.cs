@@ -78,7 +78,6 @@
             textBox3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
             textBox3.Location = new Point(6, 245);
             textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "What's the topic? (Optional)";
             textBox3.Size = new Size(767, 39);
             textBox3.TabIndex = 9;
             // 
@@ -88,9 +87,9 @@
             label6.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             label6.Location = new Point(6, 212);
             label6.Name = "label6";
-            label6.Size = new Size(97, 30);
+            label6.Size = new Size(102, 30);
             label6.TabIndex = 8;
-            label6.Text = "Kategori";
+            label6.Text = "Category";
             // 
             // checkBox1
             // 
@@ -137,9 +136,9 @@
             label3.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             label3.Location = new Point(6, 77);
             label3.Name = "label3";
-            label3.Size = new Size(125, 30);
+            label3.Size = new Size(148, 30);
             label3.TabIndex = 3;
-            label3.Text = "Description";
+            label3.Text = "Text Contents";
             label3.Click += label3_Click;
             // 
             // label2
