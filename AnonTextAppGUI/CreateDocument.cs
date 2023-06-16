@@ -67,13 +67,13 @@ namespace AnonTextAppGUI
             string isiPassword = string.IsNullOrEmpty(password) ? null : password;
 
             // Set document to Client API
-            ClientAPI.createDocument(title, text, kategori, isiPassword);
+            ClientAPI.CreateDocument(title, text, kategori, isiPassword);
 
             // Set button color to indicate submission
             button1.BackColor = Color.Green;
 
             // Copy ID this document
-            string ID = await ClientAPI.createDocument(title, text, kategori, isiPassword);
+            string ID = await ClientAPI.CreateDocument(title, text, kategori, isiPassword);
 
             // Show dialog box status
             MessageBox.Show("Published", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
