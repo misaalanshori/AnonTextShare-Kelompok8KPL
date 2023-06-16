@@ -39,16 +39,13 @@ namespace AnonTextAppGUI
                 {
                     password = null;
                 }
-                Debug.WriteLine("Submitting");
                 List<string> listOfCodes = new();
                 string[] codes = textBox3.Text.Split('\n');
                 foreach (string code in codes)
                 {
                     listOfCodes.Add(code.Trim());
                 }
-                Debug.WriteLine("Submittedp2");
                 string collectionCode = await ClientAPI.createCollection(title, password, listOfCodes);
-                Debug.WriteLine("Submitted");
                 textBox4.Text = collectionCode;
             }
 
