@@ -264,6 +264,8 @@
             Margin = new Padding(2);
             Name = "ViewDocument";
             Text = "ViewDocument";
+            FormClosing += ViewDocument_FormClosing;
+            FormClosed += ViewDocument_FormClosed;
             Load += ViewDocument_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

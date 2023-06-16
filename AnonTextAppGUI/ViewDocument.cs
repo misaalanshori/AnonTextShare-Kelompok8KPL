@@ -102,7 +102,18 @@ namespace AnonTextAppGUI
 
         private void button5_Click(object sender, EventArgs e)
         {
-            IController.s_ControllerGUI.CreateDocumentToMenu();
+            IController.s_ControllerGUI.ViewDocumentToMenu();
+        }
+
+        private void ViewDocument_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            IController.s_ControllerGUI.ViewDocumentToMenu();
+        }
+
+        private void ViewDocument_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            IController.s_ControllerGUI.ViewDocumentToMenu();
+            e.Cancel = true;
         }
     }
 }
