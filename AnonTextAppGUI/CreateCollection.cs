@@ -45,7 +45,7 @@ namespace AnonTextAppGUI
                 {
                     listOfCodes.Add(code.Trim());
                 }
-                string collectionCode = await ClientAPI.createCollection(title, password, listOfCodes);
+                string collectionCode = await ClientAPI.CreateCollection(title, password, listOfCodes);
                 textBox4.Text = collectionCode;
             }
 
