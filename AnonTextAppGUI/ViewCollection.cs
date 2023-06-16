@@ -58,6 +58,7 @@ namespace AnonTextAppGUI
             {
                 await ClientAPI.ChangeCollectionsTitle(_id, _password, textBox2.Text);
             }
+            RefreshData();
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -71,6 +72,7 @@ namespace AnonTextAppGUI
             {
                 await ClientAPI.AddContents(_id, _password, textBox4.Text);
             }
+            RefreshData();
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -79,6 +81,7 @@ namespace AnonTextAppGUI
             {
                 await ClientAPI.DeleteContent(_id, _password, textBox4.Text);
             }
+            RefreshData();
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
