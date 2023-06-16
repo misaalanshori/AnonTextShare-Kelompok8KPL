@@ -23,12 +23,12 @@ namespace AnonTextAppGUI
         {
             if (textBox1.Text.Trim().Length == 0)
             {
-                MessageBox.Show("An Error Occured", "Collection title is empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Collection title is empty", "An Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else if (textBox3.Text.Trim().Length == 0)
             {
-                MessageBox.Show("An Error Occured", "Collection contents is empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Collection contents is empty", "An Error Occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
