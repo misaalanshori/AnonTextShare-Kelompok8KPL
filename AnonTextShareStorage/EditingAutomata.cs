@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnonTextShareStorage
 {
-    internal class EditingAutomata
+    public class EditingAutomata
     {
         public enum State
         {
@@ -34,16 +34,16 @@ namespace AnonTextShareStorage
             }
         }
 
-        transition[] tr = {
+        static transition[] tr = {
             new transition(State.Locked, State.Locked, Trigger.Editing),
             new transition(State.UnLocked, State.Locked, Trigger.Editing),
             new transition(State.Locked, State.UnLocked, Trigger.NotEditing),
             new transition(State.UnLocked, State.UnLocked, Trigger.NotEditing)
         };
 
-        public State current;
+        public static State current;
 
-        public State getNextState(State prevState, Trigger trigger)
+        public static State getNextState(State prevState, Trigger trigger)
         {
             State nextState = prevState;
             for (int i = 0; i < tr.Length; i++)
@@ -57,26 +57,26 @@ namespace AnonTextShareStorage
             return current;
         }// Method untuk berganti state
 
-        public void SwitchAutomata(string command)
-        {
-            EditingAutomata edit = new EditingAutomata();
-            edit.current = State.UnLocked;
+        //public void SwitchAutomata(string command)
+        //{
+        //    EditingAutomata edit = new EditingAutomata();
+        //    edit.current = State.UnLocked;
 
-            switch (edit.current)
-            {
-                case State.Locked:
-                    if (command == "Editing")
-                        edit.getNextState(State.Locked, Trigger.Editing);
-                    else if (command == "NotEditing")
-                        edit.getNextState(State.UnLocked, Trigger.NotEditing);
-                    break;
-                case State.UnLocked:
-                    if (command == "Editing")
-                        edit.getNextState(State.Locked, Trigger.Editing);
-                    else if (command == "NotEditing")
-                        edit.getNextState(State.UnLocked, Trigger.NotEditing);
-                    break;
-            }
-        }// Switch Case Automata, return state saat Editing atau tidak
+        //    switch (edit.current)
+        //    {
+        //        case State.Locked:
+        //            if (command == "Editing")
+        //                edit.getNextState(State.Locked, Trigger.Editing);
+        //            else if (command == "NotEditing")
+        //                edit.getNextState(State.UnLocked, Trigger.NotEditing);
+        //            break;
+        //        case State.UnLocked:
+        //            if (command == "Editing")
+        //                edit.getNextState(State.Locked, Trigger.Editing);
+        //            else if (command == "NotEditing")
+        //                edit.getNextState(State.UnLocked, Trigger.NotEditing);
+        //            break;
+        //    }
+        //}// Switch Case Automata, return state saat Editing atau tidak
     }
 }

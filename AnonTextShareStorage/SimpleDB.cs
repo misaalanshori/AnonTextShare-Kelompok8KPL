@@ -17,20 +17,24 @@ namespace AnonTextShareStorage
         private static Random rnd = new();
 
         // Document Storage
-        private Dictionary<string, string> docPass = new();
-        private Dictionary<string, string> docTitle = new();
-        private Dictionary<string, string> docContent = new();
-        private Dictionary<string, int> docViews = new();
-        private Dictionary<string, List<string>> docComments = new();
+        private Dictionary<string, string> _docPass = new();
+        private Dictionary<string, string> _docTitle = new();
+        private Dictionary<string, string> _docContent = new();
+        private Dictionary<string, int> _docViews = new();
+        private Dictionary<string, List<string>> _docComments = new();
+        private Dictionary<string, KategoriDokumen.Kategori> _docCategory = new();
+        private Dictionary<string, EditingAutomata.State> _docLock = new();
+        private Dictionary<string, int> _docReportCount = new();
+        private Dictionary<string, ReportingHabli.State> _docReportState = new();
 
         // Collection Storage
-        private Dictionary<string, string> colPass = new();
-        private Dictionary<string, string> colTitle = new();
-        private Dictionary<string, List<string>> colContent = new();
-        private Dictionary<string, int> colViews = new();
+        private Dictionary<string, string> _colPass = new();
+        private Dictionary<string, string> _colTitle = new();
+        private Dictionary<string, List<string>> _colContent = new();
+        private Dictionary<string, int> _colViews = new();
 
         // String hashing method
-        private static String SHA256Hash(string value)
+        private static String sha256Hash(string value)
         {
             StringBuilder Sb = new StringBuilder();
 
@@ -53,62 +57,70 @@ namespace AnonTextShareStorage
         }
 
         // Document Methods
-        public override string CreateDocument(string title, string text)
+        public override string CreateDocument(string title, string text, KategoriDokumen.Kategori category)
         {
             try
             {
                 string key = generateRandomID();
-                docPass.Add(key, "");
-                docTitle.Add(key, title);
-                docContent.Add(key, text);
-                docViews.Add(key, 0);
-                docComments.Add(key, new List<string>());
+                _docPass.Add(key, "");
+                _docTitle.Add(key, title);
+                _docContent.Add(key, text);
+                _docViews.Add(key, 0);
+                _docComments.Add(key, new List<string>());
+                _docCategory.Add(key, category);
+                _docLock.Add(key, EditingAutomata.State.UnLocked);
+                _docReportCount.Add(key, 0);
+                _docReportState.Add(key, ReportingHabli.State.Safe);
                 return key;
             }
             catch (ArgumentException e)
             {
-                return CreateDocument(title, text);
+                return CreateDocument(title, text, category);
             }
         } // return string id document, password isi empty string
 
 
-        public override string CreateDocument(string title, string text, string pass)
+        public override string CreateDocument(string title, string text, KategoriDokumen.Kategori category, string pass)
         {
             Debug.Assert(pass.Length > 4);
-            string passkey = SHA256Hash(pass);
+            string passkey = sha256Hash(pass);
             try
             {
                 string key = generateRandomID();
-                docPass.Add(key, passkey);
-                docTitle.Add(key, title);
-                docContent.Add(key, text);
-                docViews.Add(key, 0);
-                docComments.Add(key, new List<string>());
+                _docPass.Add(key, passkey);
+                _docTitle.Add(key, title);
+                _docContent.Add(key, text);
+                _docViews.Add(key, 0);
+                _docComments.Add(key, new List<string>());
+                _docCategory.Add(key, category);
+                _docLock.Add(key, EditingAutomata.State.UnLocked);
+                _docReportCount.Add(key, 0);
+                _docReportState.Add(key, ReportingHabli.State.Safe);
                 return key;
             }
             catch (ArgumentException e)
             {
-                return CreateDocument(title, text, pass);
+                return CreateDocument(title, text, category, pass);
             }
 
         } // return string id document, simpan password di hash
 
         public override bool CheckDocument(string id)
         {
-            return docTitle.ContainsKey(id);
+            return _docTitle.ContainsKey(id);
         } // return true jika dokumen ditemukan
 
         public override bool CheckDocument(string id, string pass)
         {
             Debug.Assert(pass.Length > 4);
-            return docPass.ContainsKey(id) && docPass[id].Equals(SHA256Hash(pass));
+            return _docPass.ContainsKey(id) && _docPass[id].Equals(sha256Hash(pass));
         } // return true jika dokumen ditemukan dan pass benar
 
         public override string? GetDocumentTitle(string id)
         {
             if (CheckDocument(id))
             {
-                return docTitle[id];
+                return _docTitle[id];
             }
             return null;
         }
@@ -117,8 +129,8 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id))
             {
-                docViews[id]++;
-                return docContent[id];
+                _docViews[id]++;
+                return _docContent[id];
             }
             return null;
         }
@@ -127,7 +139,7 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id, pass))
             {
-                docTitle[id] = title;
+                _docTitle[id] = title;
                 return true;
             }
             return false;
@@ -137,7 +149,7 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id, pass))
             {
-                docContent[id] = contents;
+                _docContent[id] = contents;
                 return true;
             }
             return false;
@@ -147,11 +159,11 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id, pass))
             {
-                docPass.Remove(id);
-                docTitle.Remove(id);
-                docContent.Remove(id);
-                docViews.Remove(id);
-                docComments.Remove(id);
+                _docPass.Remove(id);
+                _docTitle.Remove(id);
+                _docContent.Remove(id);
+                _docViews.Remove(id);
+                _docComments.Remove(id);
                 return true;
             }
             return false;
@@ -161,7 +173,7 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id))
             {
-                return docViews[id];
+                return _docViews[id];
             }
             return -1;
         } // Document Views di increment setiap GetDocumentText dipanggil
@@ -170,7 +182,7 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id))
             {
-                docComments[id].Add(text);
+                _docComments[id].Add(text);
                 return true;
             }
             return false;
@@ -180,10 +192,99 @@ namespace AnonTextShareStorage
         {
             if (CheckDocument(id))
             {
-                return docComments[id];
+                return _docComments[id];
             }
-            return null;        }
+            return null;
+        }
 
+        public override bool UpdateDocumentCategory(string id, KategoriDokumen.Kategori category, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                _docCategory[id] = category;
+                return true;
+            }
+            return false;
+        }
+
+        public override string? GetDocumentCategoryString(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return KategoriDokumen.kategoriDokumen[(int)_docCategory[id]] ;
+            }
+            return null;
+        }
+
+        public override KategoriDokumen.Kategori? GetDocumentCategory(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return _docCategory[id];
+            }
+            return null;
+        }
+
+        public override bool TriggerDocumentLock(string id, EditingAutomata.Trigger trigger, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                _docLock[id] = EditingAutomata.getNextState(_docLock[id], trigger);
+                return true;
+            }
+            return false;
+        }
+
+        public override EditingAutomata.State? GetDocumentLock(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return _docLock[id];
+            }
+            return null;
+        }
+
+        public override bool ReportDocument(string id)
+        {
+            if (CheckDocument(id))
+            {
+                _docReportCount[id] = _docReportCount[id] + 1;
+                if (_docReportCount[id] % 10 == 0)
+                {
+                    _docReportState[id] = ReportingHabli.GetNextState(_docReportState[id], ReportingHabli.Trigger.Escalate);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public override bool UnlockDocument(string id, string pass)
+        {
+            if (CheckDocument(id, pass))
+            {
+                _docReportState[id] = ReportingHabli.GetNextState(_docReportState[id], ReportingHabli.Trigger.Unlock);
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetReportCount(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return _docReportCount[id];
+            }
+            return -1;
+        }
+
+        public override ReportingHabli.State? GetReportState(string id)
+        {
+            if (CheckDocument(id))
+            {
+                return _docReportState[id];
+            }
+            return null;
+        }
 
         // Collection methods
         public override string CreateCollection(string title, List<string> contents)
@@ -191,10 +292,10 @@ namespace AnonTextShareStorage
             string newID = generateRandomID();
             try
             {
-                colPass.Add(newID, "");
-                colTitle.Add(newID, new string(title));
-                colContent.Add(newID, new List<string>(contents));
-                colViews.Add(newID, 0);
+                _colPass.Add(newID, "");
+                _colTitle.Add(newID, new string(title));
+                _colContent.Add(newID, new List<string>(contents));
+                _colViews.Add(newID, 0);
                 return newID;
             } catch (ArgumentException e)
             {
@@ -209,10 +310,10 @@ namespace AnonTextShareStorage
             string newID = generateRandomID();
             try
             {
-                colPass.Add(newID, SHA256Hash(pass));
-                colTitle.Add(newID, new string(title));
-                colContent.Add(newID, new List<string>(contents));
-                colViews.Add(newID, 0);
+                _colPass.Add(newID, sha256Hash(pass));
+                _colTitle.Add(newID, new string(title));
+                _colContent.Add(newID, new List<string>(contents));
+                _colViews.Add(newID, 0);
                 return newID;
             } catch (ArgumentException e)
             {
@@ -223,20 +324,20 @@ namespace AnonTextShareStorage
 
         public override bool CheckCollection(string id)
         {
-            return colPass.ContainsKey(id);
+            return _colPass.ContainsKey(id);
         } // return true jika koleksi ditemukan
 
         public override bool CheckCollection(string id, string pass)
         {
             Debug.Assert(pass.Length > 4); // Password harus lebih dari 4 karakter
-            return colPass.ContainsKey(id) && colPass[id].Equals(SHA256Hash(pass));
+            return _colPass.ContainsKey(id) && _colPass[id].Equals(sha256Hash(pass));
         } // return true jika koleksi ditemukan dan pass benar
 
         public override string? GetCollectionTitle(string id)
         {
             if (CheckCollection(id))
             {
-                return new string(colTitle[id]);
+                return new string(_colTitle[id]);
             }
             return null;
         }
@@ -245,8 +346,8 @@ namespace AnonTextShareStorage
         {
             if (CheckCollection(id))
             {
-                colViews[id]++;
-                return new List<string>(colContent[id]);
+                _colViews[id]++;
+                return new List<string>(_colContent[id]);
             }
             return null;
             
@@ -256,7 +357,7 @@ namespace AnonTextShareStorage
         {
             if (CheckCollection(id, pass))
             {
-                colTitle[id] = new string(title);
+                _colTitle[id] = new string(title);
                 return true;
             }
             return false;
@@ -266,7 +367,7 @@ namespace AnonTextShareStorage
         {
             if (CheckCollection(id, pass))
             {
-                colContent[id].Add(documentId);
+                _colContent[id].Add(documentId);
                 return true;
             }
             return false;
@@ -276,7 +377,7 @@ namespace AnonTextShareStorage
         {
             if (CheckCollection(id, pass))
             {
-                colContent[id].Remove(documentId);
+                _colContent[id].Remove(documentId);
                 return true;
             }
             return false;
@@ -286,10 +387,10 @@ namespace AnonTextShareStorage
         {
             if (CheckCollection(id, pass))
             {
-                colPass.Remove(id);
-                colTitle.Remove(id);
-                colContent.Remove(id);
-                colViews.Remove(id);
+                _colPass.Remove(id);
+                _colTitle.Remove(id);
+                _colContent.Remove(id);
+                _colViews.Remove(id);
                 return true;
             }
             return false;
@@ -299,7 +400,7 @@ namespace AnonTextShareStorage
         {
             if(CheckCollection(id))
             {
-                return colViews[id];
+                return _colViews[id];
             }
             return -1;
         } // Collection Views di increment setiap GetCollectionContents dipanggil

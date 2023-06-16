@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnonTextShareStorage
 {
-    internal class ReportingHabli
+    public class ReportingHabli
     {
         public enum State
         {
@@ -36,7 +36,7 @@ namespace AnonTextShareStorage
             }
         }
 
-        private Transition[] transitions = new Transition[]
+        private static Transition[] transitions = new Transition[]
         {
         new Transition(State.Safe, State.Warning, Trigger.Escalate),
         new Transition(State.Warning, State.Dangerous, Trigger.Escalate),
@@ -44,7 +44,7 @@ namespace AnonTextShareStorage
         new Transition(State.Locked, State.Safe, Trigger.Unlock)
         };
 
-        public State GetNextState(State prevState, Trigger trigger)
+        public static State GetNextState(State prevState, Trigger trigger)
         {
             foreach (Transition transition in transitions)
             {
