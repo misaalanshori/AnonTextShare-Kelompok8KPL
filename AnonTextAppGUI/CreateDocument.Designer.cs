@@ -30,6 +30,8 @@
         {
             label1 = new Label();
             panel1 = new Panel();
+            textBox3 = new TextBox();
+            label6 = new Label();
             checkBox1 = new CheckBox();
             textBox2 = new TextBox();
             label5 = new Label();
@@ -55,6 +57,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(textBox3);
+            panel1.Controls.Add(label6);
             panel1.Controls.Add(checkBox1);
             panel1.Controls.Add(textBox2);
             panel1.Controls.Add(label5);
@@ -68,6 +72,24 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(776, 374);
             panel1.TabIndex = 1;
+            // 
+            // textBox3
+            // 
+            textBox3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            textBox3.Location = new Point(6, 245);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(767, 39);
+            textBox3.TabIndex = 9;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label6.Location = new Point(6, 212);
+            label6.Name = "label6";
+            label6.Size = new Size(97, 30);
+            label6.TabIndex = 8;
+            label6.Text = "Kategori";
             // 
             // checkBox1
             // 
@@ -84,6 +106,7 @@
             // 
             textBox2.Location = new Point(6, 331);
             textBox2.Name = "textBox2";
+            textBox2.PlaceholderText = "Minimum 5 Characters";
             textBox2.Size = new Size(694, 26);
             textBox2.TabIndex = 6;
             // 
@@ -143,7 +166,7 @@
             richTextBox1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             richTextBox1.Location = new Point(6, 110);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(767, 185);
+            richTextBox1.Size = new Size(767, 89);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -168,6 +191,7 @@
             Controls.Add(panel1);
             Name = "CreateDocument";
             Text = "CreateDocument";
+            FormClosing += CreateDocument_FormClosing;
             Load += CreateDocument_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -187,5 +211,7 @@
         private Label label4;
         private TextBox textBox2;
         private CheckBox checkBox1;
+        private TextBox textBox3;
+        private Label label6;
     }
 }
