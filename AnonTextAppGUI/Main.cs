@@ -14,13 +14,14 @@ namespace AnonTextAppGUI
             IController.s_ControllerGUI = controllerGUI;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private async void button1_Click_1(object sender, EventArgs e)
         {
             if (radioButton1.Checked)
             {
-                if (ClientAPI.GetDocument(textBox1.Text).Result != null) ;
-                {
-                    IController.s_ControllerGUI.MenuToViewDocument(textBox1.Text, textBox2.Text, ClientAPI.GetDocument(textBox1.Text).Result);
+                TextDocument document = await ClientAPI.GetDocument(textBox1.Text);
+                if (document != null) ;
+                {   
+                    IController.s_ControllerGUI.MenuToViewDocument(textBox1.Text, textBox2.Text, document);
                 }
             }
             else if (radioButton2.Checked)
