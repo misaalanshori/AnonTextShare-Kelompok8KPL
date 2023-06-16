@@ -3,10 +3,10 @@ namespace AnonTextAppConsoleUI
 {
     public class TextCollection
     {
-        public string? Id { get; internal set; }
+        public string? Id { get; set; }
         public string Title { get; set; }
         public List<TextDocument> Contents { get; set; }
-        public int? Views { get; internal set; }
+        public int? Views { get; set; }
 
         public TextCollection() { }
 
