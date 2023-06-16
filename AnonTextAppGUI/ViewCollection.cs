@@ -36,7 +36,8 @@ namespace AnonTextAppGUI
 
             for (int i = 0; i < _collection.Contents.Count; i++)
             {
-                this.textBox3.Text += _collection.Id + " - " + _collection.Title + "\n";
+                string text = $"{_collection.Contents[i].Id} - {_collection.Contents[i].Title}";
+                this.textBox3.Text += text + Environment.NewLine;
             }
         }
 
