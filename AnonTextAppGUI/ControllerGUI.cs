@@ -51,9 +51,9 @@ namespace AnonTextAppGUI
             _createCollection.Hide();
         }
 
-        public void MenuToViewDocument(string id, string password)
+        public void MenuToViewDocument(string id, string password, TextDocument document)
         {
-            _viewDocument.SetDocument(id, password);
+            _viewDocument.SetDocument(id, password, document);
             _viewDocument.Show();
             _main.Hide();
         }
