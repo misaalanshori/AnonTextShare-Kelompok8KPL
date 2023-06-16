@@ -78,6 +78,7 @@
             textBox3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
             textBox3.Location = new Point(6, 245);
             textBox3.Name = "textBox3";
+            textBox3.PlaceholderText = "What's the topic? (Optional)";
             textBox3.Size = new Size(767, 39);
             textBox3.TabIndex = 9;
             // 
@@ -106,7 +107,7 @@
             // 
             textBox2.Location = new Point(6, 331);
             textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Minimum 5 Characters";
+            textBox2.PlaceholderText = "Minimum 5 Characters (Optional)";
             textBox2.Size = new Size(694, 26);
             textBox2.TabIndex = 6;
             // 

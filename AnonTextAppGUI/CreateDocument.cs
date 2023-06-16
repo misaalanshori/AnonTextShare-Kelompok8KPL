@@ -67,14 +67,14 @@ namespace AnonTextAppGUI
             string isiPassword = string.IsNullOrEmpty(password) ? null : password;
             string isiKategori = string.IsNullOrEmpty(kategori) ? null : kategori;
 
-            // Set button color to indicate submission
-            button1.BackColor = Color.Green;
-
             // Set document to Client API
             ClientAPI.createDocument(title, text, isiKategori, isiPassword);
 
+            // Set button color to indicate submission
+            button1.BackColor = Color.Green;
+
             // Show dialog box status
-            MessageBox.Show("Submitted", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Published", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // Reset form
             textBox1.Clear();
@@ -85,6 +85,8 @@ namespace AnonTextAppGUI
 
             // Reset button color
             button1.BackColor = Color.White;
+
+            this.Close();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -133,6 +135,7 @@ namespace AnonTextAppGUI
 
         private void CreateDocument_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Go back to main menu through exit window
             IController.s_ControllerGUI.CreateDocumentToMenu();
             e.Cancel = true;
         }
