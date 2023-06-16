@@ -1,3 +1,5 @@
+using AnonTextAppConsoleUI;
+
 namespace AnonTextAppGUI
 {
     public partial class Main : Form, IController
@@ -16,7 +18,10 @@ namespace AnonTextAppGUI
         {
             if (radioButton1.Checked)
             {
-                IController.s_ControllerGUI.MenuToViewDocument(textBox1.Text, textBox2.Text);
+                if (ClientAPI.GetDocument(textBox1.Text).Result != null) ;
+                {
+                    IController.s_ControllerGUI.MenuToViewDocument(textBox1.Text, textBox2.Text, ClientAPI.GetDocument(textBox1.Text).Result);
+                }
             }
             else if (radioButton2.Checked)
             {

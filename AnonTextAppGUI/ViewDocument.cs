@@ -15,13 +15,12 @@ namespace AnonTextAppGUI
     {
         private string _idDocument;
         private string _password;
+        private TextDocument _document;
         public ViewDocument()
         {
             InitializeComponent();
-            TextDocument td = new TextDocument("1", "2", "3");
-            textBox1.Text = td.Title;
-            textBox2.Text = td.Kategori;
-            //richTextBox1 = td.Contents;
+
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -36,14 +35,25 @@ namespace AnonTextAppGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            textBox1.Text = string.Empty;
 
         }
 
-        public void SetDocument(string id, string password)
+        public void SetDocument(string id, string password, TextDocument document)
         {
             _idDocument = id;
             _password = password;
+            _document = document;
+        }
+
+        private void ViewDocument_Load(object sender, EventArgs e)
+        {
+            textBox1.Text = _document.Title;
+            textBox2.Text = _document.Kategori;
+            richTextBox1.Rtf = _document.Contents;
+            foreach (var comment in _document.Comments)
+            {
+                listBox1.Items.Add(comment);
+            }
         }
     }
 }
