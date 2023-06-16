@@ -33,6 +33,7 @@ namespace AnonTextAppGUI
             _collection = await ClientAPI.GetCollection(_id);
             this.textBox2.Text = _collection.Title;
             this.label5.Text = _collection.Id;
+            this.textBox3.Text = "";
 
             for (int i = 0; i < _collection.Contents.Count; i++)
             {
