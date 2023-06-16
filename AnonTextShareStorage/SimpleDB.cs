@@ -13,7 +13,6 @@ namespace AnonTextShareStorage
 { 
     public class SimpleDB : DatabaseConnection
     {
-        // Random
         private static Random rnd = new();
 
         // Document Storage
@@ -77,7 +76,7 @@ namespace AnonTextShareStorage
             {
                 return CreateDocument(title, text, category);
             }
-        } // return string id document, password isi empty string
+        }
 
 
         public override string CreateDocument(string title, string text, KategoriDokumen.Kategori category, string pass)
@@ -103,18 +102,18 @@ namespace AnonTextShareStorage
                 return CreateDocument(title, text, category, pass);
             }
 
-        } // return string id document, simpan password di hash
+        }
 
         public override bool CheckDocument(string id)
         {
             return _docTitle.ContainsKey(id);
-        } // return true jika dokumen ditemukan
+        }
 
         public override bool CheckDocument(string id, string pass)
         {
             Debug.Assert(pass.Length > 4);
             return _docPass.ContainsKey(id) && _docPass[id].Equals(sha256Hash(pass));
-        } // return true jika dokumen ditemukan dan pass benar
+        }
 
         public override string? GetDocumentTitle(string id)
         {
@@ -143,7 +142,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika title dokumen berhasil di update (dokumen ada dan pass benar)
+        }
 
         public override bool UpdateDocumentText(string id, string pass, string contents)
         {
@@ -153,7 +152,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika teks dokumen berhasil di update (dokumen ada dan pass benar)
+        }
 
         public override bool DeleteDocument(string id, string pass)
         {
@@ -167,7 +166,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika dokumen berhasil dihapus (dokumen ada dan pass benar)
+        }
 
         public override int GetDocumentViews(string id)
         {
@@ -176,7 +175,7 @@ namespace AnonTextShareStorage
                 return _docViews[id];
             }
             return -1;
-        } // Document Views di increment setiap GetDocumentText dipanggil
+        }
 
         public override bool AddDocumentComment(string id, string text)
         {
@@ -302,11 +301,12 @@ namespace AnonTextShareStorage
                 return CreateCollection(title, contents);
             }
             
-        } // return string id collection, password isi empty string
+        }
 
         public override string CreateCollection(string title, List<string> contents, string pass)
         {
-            Debug.Assert(pass.Length > 4); // Password harus lebih dari 4 karakter
+            // Password harus lebih dari 4 karakter
+            Debug.Assert(pass.Length > 4); 
             string newID = generateRandomID();
             try
             {
@@ -320,18 +320,19 @@ namespace AnonTextShareStorage
                 return CreateCollection(title, contents, pass);
             }
             
-        } // return string id collection, simpan password di hash
+        }
 
         public override bool CheckCollection(string id)
         {
             return _colPass.ContainsKey(id);
-        } // return true jika koleksi ditemukan
+        }
 
         public override bool CheckCollection(string id, string pass)
         {
-            Debug.Assert(pass.Length > 4); // Password harus lebih dari 4 karakter
+            // Password harus lebih dari 4 karakter
+            Debug.Assert(pass.Length > 4);
             return _colPass.ContainsKey(id) && _colPass[id].Equals(sha256Hash(pass));
-        } // return true jika koleksi ditemukan dan pass benar
+        }
 
         public override string? GetCollectionTitle(string id)
         {
@@ -351,7 +352,7 @@ namespace AnonTextShareStorage
             }
             return null;
             
-        } // return list string id dokumen
+        }
 
         public override bool UpdateCollectionTitle(string id, string title, string pass)
         {
@@ -361,7 +362,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika judul berhasil di ubah
+        }
 
         public override bool AddCollectionDocument(string id, string documentId, string pass)
         {
@@ -371,7 +372,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika id dokumen berhasil ditambahkan
+        }
 
         public override bool RemoveCollectionDocument(string id, string documentId, string pass)
         {
@@ -381,7 +382,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika id dokumen berhasil dihapus
+        }
 
         public override bool DeleteCollection(string id, string pass)
         {
@@ -394,7 +395,7 @@ namespace AnonTextShareStorage
                 return true;
             }
             return false;
-        } // return true jika koleksi berhasil di hapus
+        }
 
         public override int GetCollectionViews(string id)
         {
@@ -403,6 +404,6 @@ namespace AnonTextShareStorage
                 return _colViews[id];
             }
             return -1;
-        } // Collection Views di increment setiap GetCollectionContents dipanggil
+        }
     }
 }

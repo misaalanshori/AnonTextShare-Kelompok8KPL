@@ -30,12 +30,17 @@ namespace AnonTextShareStorage
 
         public static Kategori kategoriFromString(string kategoriCari)
         {
-            for (int i = 0; i < kategoriDokumen.Length; i++)
+            if (kategoriCari != null)
             {
-                if (kategoriDokumen[i].Equals(kategoriCari)) {
-                    return (Kategori)i;
+                for (int i = 0; i < kategoriDokumen.Length; i++)
+                {
+                    if (kategoriDokumen[i].Trim().ToLower().Equals(kategoriCari.Trim().ToLower()))
+                    {
+                        return (Kategori)i;
+                    }
                 }
             }
+            
             return Kategori.LAIN;
         }
 
