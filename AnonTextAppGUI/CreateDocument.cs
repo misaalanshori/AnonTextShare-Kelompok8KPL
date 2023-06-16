@@ -42,59 +42,49 @@ namespace AnonTextAppGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Variable
+            // Get input values
             string title = textBox1.Text.Trim();
             string text = richTextBox1.Text.Trim();
             string password = textBox2.Text.Trim();
             string kategori = textBox3.Text.Trim();
-            string isiPassword = "";
 
-            // Button turned red if there is nothing
+            // Check if the required fields are empty
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
             {
-                button1.BackColor = Color.Red;
-
-                // Show dialog box status
+                // Show dialog box status if not filled
                 MessageBox.Show("Fill the document first!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                button1.BackColor = Color.Gray;
+                return;
             }
-            else if (!string.IsNullOrEmpty(password))
+
+            // Check password length if provided
+            if (!string.IsNullOrEmpty(password) && password.Length < 5)
             {
-                if (password.Length >= 5)
-                {
-                    isiPassword = password;
-                }
-                else
-                {
-                    MessageBox.Show("Password must be 5 characters or more!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Password must be at least 5 characters long!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else if (!string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(text))
-            {
-                button1.BackColor = Color.Green;
 
-                // Set Password as null if not filled
-                isiPassword = null;
+            // Submit the document
+            string isiPassword = string.IsNullOrEmpty(password) ? null : password;
+            string isiKategori = string.IsNullOrEmpty(kategori) ? null : kategori;
 
-                // Set category
-                string isiKategori = kategori;
+            // Set button color to indicate submission
+            button1.BackColor = Color.Green;
 
-                // Set document to Client API
-                ClientAPI.AddContents(title, text, isiPassword);
+            // Set document to Client API
+            ClientAPI.createDocument(title, text, isiKategori, isiPassword);
 
-                // Show dialog box status
-                MessageBox.Show("Submited", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Show dialog box status
+            MessageBox.Show("Submitted", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Reset String
-                title = string.Empty;
-                text = string.Empty;
-                password = string.Empty;
-                checkBox1.Checked = false;
-                kategori = string.Empty;
+            // Reset form
+            textBox1.Clear();
+            richTextBox1.Clear();
+            textBox2.Clear();
+            checkBox1.Checked = false;
+            textBox3.Clear();
 
-                button1.BackColor = Color.White;
-            };
+            // Reset button color
+            button1.BackColor = Color.White;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
